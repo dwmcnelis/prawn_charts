@@ -36,9 +36,9 @@ module PrawnCharts
           layer_options[:opacity]     = opacity_for(idx)
           layer_options[:theme]       = options[:theme]
 
-          pdf.g(:id => "component_#{id}_graph_#{idx}", :class => 'graph_layer') {
+          #pdf.g(:id => "component_#{id}_graph_#{idx}", :class => 'graph_layer') {
             layer.render(pdf, layer_options)
-          }
+          #}
         end # applicable_layers
       end # draw
 

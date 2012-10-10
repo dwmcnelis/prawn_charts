@@ -57,10 +57,10 @@ module PrawnCharts::Themes
       self.outlines[(@previous_outline-1) % self.outlines.size]
     end
 
-    # todo: Implement darken function.
+    # TODO: Implement darken function.
     def darken(color, shift=20); end
     
-    # todo: Implement lighten function.
+    # TODO: Implement lighten function.
     def lighten(color, shift=20); end
     
   end
@@ -72,9 +72,9 @@ module PrawnCharts::Themes
   class Standard < Base
     def initialize
       super({
-              :background => ['#FFFFFF', '#FFFFFF'],
-              :marker => '#999999',
-              :colors => %w(#1919B3 #FFB200 #FFFF00 #660099 #E9E9FF #FFF7E6 #FFFFE6 #F7E6FF #0F0F6B #996B00 #999900 #3D005C)
+              :background => ['ffffff', 'ffffff'],
+              :marker => '999999',
+              :colors => %w(1919b3 ffb200 ffff00 660099 e9e9ff fff7e6 ffffe6 f7e6ff 0f0f6b 996b00 999900 3d005c)
             })
     
     end
@@ -86,9 +86,9 @@ module PrawnCharts::Themes
   class Keynote < Base
     def initialize
       super({  
-              :background => [:black, '#4A465A'],
-              :marker => :white, 
-              :colors => %w(#6886B4 #FDD84E #72AE6E #D1695E #8A6EAF #EFAA43 white)
+              :background => ['000000', '4a465a'],
+              :marker => 'ffffff', 
+              :colors => %w(6886b4 fdd84e 72ae6e d1695e 8a6eaf efaa43 ffffff)
              })
     end
   end
@@ -97,9 +97,9 @@ module PrawnCharts::Themes
   class Mephisto < Base
     def initialize
       super({
-              :background => ['#101010', '#999977'],
-              :marker => :white,
-              :colors => %w(#DD3300 #66AABB #225533 #992200)
+              :background => ['101010', '999977'],
+              :marker => 'ffffff',
+              :colors => %w(dd3300 66aabb 225533 992200)
             })
       
     end
@@ -109,9 +109,9 @@ module PrawnCharts::Themes
   class RubyBlog < Base
     def initialize
       super({
-              :background => ['#670A0A', '#831515'],
-              :marker => '#DBD1C1',
-              :colors => %w(#007777 #444477 #994444 #77FFBB #D75A20)
+              :background => ['670a0a', '831515'],
+              :marker => 'dbd1c1',
+              :colors => %w(007777 444477 994444 77ffbb d75a20)
             })
     end
   end
@@ -120,9 +120,9 @@ module PrawnCharts::Themes
   class Apples < Base
     def initialize
       super({
-              :background => ['#3B411F', '#4A465A'],
-              :marker => '#DBD1C1',
-              :colors => %w(#AA3322 #DD3322 #DD6644 #FFEE88 #BBCC66 #779933)
+              :background => ['3b411f', '4a465a'],
+              :marker => 'dbd1c1',
+              :colors => %w(aa3322 dd3322 dd6644 ffee88 bbcc66 779933)
             })
     end
   end
@@ -132,11 +132,11 @@ module PrawnCharts::Themes
     def initialize
       super({
               # Playing with Sky Background
-              # :background => ['#2774B6', '#5EA6D8'],
-              # :marker => :white,
-              :background => [:black, '#4A465A'],
-              :marker => :white,
-              :colors => %w(#FFBBBB #00CC33 #7788BB #EEAA44 #FFDD11 #44BBDD #DD6677)
+              # :background => ['2774b6', '5ea6d8'],
+              # :marker => 'ffffff',
+              :background => ['000000', '4a465a'],
+              :marker => 'ffffff',
+              :colors => %w(ffbbbb 00cc33 7788bb eeaa44 ffdd11 44bbdd dd6677)
             })
     end
   end  
@@ -146,9 +146,9 @@ module PrawnCharts::Themes
   class Vitamins < Base
     def initialize
       super({
-              :background => [:black, '#4A465A'],
-              :marker => :white,
-              :colors => %w(#CC9933 #FFCC66 #CCCC99 #CCCC33 #99CC33 #3333CC #336699 #6633CC #9999CC #333366)
+              :background => ['000000', '4a465a'],
+              :marker => 'ffffff',
+              :colors => %w(cc9933 ffcc66 cccc99 cccc33 99cc33 3333cc 336699 6633cc 9999cc 333366)
             })
     end
   end
@@ -157,9 +157,9 @@ module PrawnCharts::Themes
   class Tulips < Base
     def initialize
       super({
-              :background => ['#670A0A', '#831515'],
-              :marker => '#DBD1C1',
-              :colors => %w(#F2C8CA #BF545E #D2808E #97985C #B3B878 #A24550)
+              :background => ['670a0a', '831515'],
+              :marker => 'dbd1c1',
+              :colors => %w(f2c8ca bf545e d2808e 97985c b3b878 a24550)
             })
     end
   end
