@@ -52,21 +52,33 @@ module PrawnCharts::Themes
       @previous_outline = 0 if @previous_outline.nil?
       @previous_outline += 1
       if self.outlines.nil?
-        return "#000000"
+        return "000000"
       end
       self.outlines[(@previous_outline-1) % self.outlines.size]
     end
 
-    # TODO: Implement darken function.
-    def darken(color, shift=20); end
+    def darken(color, shift=20)
+      shift_color(color,-(shift))
+    end
     
-    # TODO: Implement lighten function.
-    def lighten(color, shift=20); end
-    
-  end
-  
+    def lighten(color, shift=20)
+      shift_color(color,(shift))
+    end
 
-  
+    def shift_color(color,shift)
+      r = color[0..1].hex+shift
+      r = 255 if r > 255
+      r = 0 if r < 0
+      g = color[2..3].hex+shift
+      g = 255 if g > 255
+      g = 0 if g < 0
+      b = color[4..5].hex+shift
+      b = 255 if b > 255
+      b = 0 if b < 0
+      (("0"+r.to_s(16))[-2..-1])+(("0"+g.to_s(16))[-2..-1])+(("0"+b.to_s(16))[-2..-1])
+    end
+  end
+
   # A basic default theme
   # Based on http://www.wellstyled.com/tools/colorscheme2/index-en.html?tetrad;50;0;255;1;-1;1;-0.6;0.1;1;0.6;1;1;-1;1;-0.6;0.1;1;0.6;1;1;-1;1;-0.6;0.1;1;0.6;1;1;-1;1;-0.6;0.1;1;0.6;1;0
   class Standard < Base
