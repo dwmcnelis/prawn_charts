@@ -4,9 +4,9 @@ require File.expand_path('../lib/prawn_charts/version', __FILE__)
 Gem::Specification.new do |gem|
   gem.authors       = ["Dave McNelis"]
   gem.email         = ["davemcnelis@market76.com"]
-  gem.description   = %q{PrawnCharts Graphing Library for Prawn
+  gem.description   = %q{Prawn::Charts, Chart module for Prawn
 (adapted from Scruffy by Brasten Sager)}
-  gem.summary       = %q{PrawnCharts Graphing Library for Prawn
+  gem.summary       = %q{PrawnCharts, Chart module for Prawn
 (adapted from Scruffy by Brasten Sager)}
   gem.homepage      = ""
 
