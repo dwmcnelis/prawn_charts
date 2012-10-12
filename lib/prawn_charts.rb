@@ -1,4 +1,5 @@
 
+require 'prawn_charts/mixins'
 require 'prawn_charts/helpers'
 require 'prawn_charts/graph_state'
 require 'prawn_charts/graph'

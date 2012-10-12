@@ -7,12 +7,10 @@ module PrawnCharts
         y = bounds[:height]
         w = bounds[:width]
         theme = options[:theme]
-        color = theme.marker
-        xcolor = theme.darken(color,128)
-        pdf.fill_color color
-        pdf.text_box "title #{options[:title]}, x #{x}, y #{y}, w #{w}, color #{color}, xcolor #{xcolor}", :at => [10, 600]
+        pdf.fill_color theme.title
+        pdf.text_box "title #{options[:title]}, x #{x}, y #{y}, w #{w}, color #{theme.title}", :at => [10, 600]
         if options[:title]
-          pdf.text_box options[:title], :at => [x,y], :width => w, :align => :center, :color => color
+          pdf.text_box options[:title], :at => [x,y], :width => w, :align => :center, :color => theme.title
           #pdf.text(options[:title],
           #  :class => 'title',
           #  :x => (bounds[:width] / 2),

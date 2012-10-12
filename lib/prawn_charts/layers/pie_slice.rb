@@ -28,7 +28,9 @@ module PrawnCharts::Layers
       
       # Diameter of the pie chart defaults to 70% of the height
       @diameter = relative(options[:diameter]) || relative(@options[:diameter]) || relative(70.0)
-      
+
+      theme = options[:theme]
+
       # Stroke
       stroke = options[:stroke] || @options[:stroke] || "none"
 
@@ -101,7 +103,7 @@ module PrawnCharts::Layers
         paleblue40 = "f4f8fa"
 
         center = [@center_x,@center_y]
-        pdf.stroke_color slate_blue
+        pdf.stroke_color theme.outlines[0]
         pdf.fill_color color
         pdf.fill_pie_slice(center,
                        :radius => radius,
@@ -134,9 +136,10 @@ module PrawnCharts::Layers
       #  'font-family' => options[:theme].font_family,
       #  :fill => (options[:theme].marker || 'black').to_s,
       #  'text-anchor' => 'middle')
-      text_color = (options[:theme].marker || '000000').to_s
+      text_color = (theme.marker || '000000').to_s
       #w = bounds[:width]   :width => w,
-      pdf.text_box "#{sprintf('%d', percent)}%", :at => [text_x,text_y+relative(MARKER_FONT_SIZE/2)], :width => 30, :align => :center, :color => text_color
+      pdf.fill_color text_color
+      pdf.text_box "#{sprintf('%d', percent)}%", :at => [text_x-relative(4),text_y+relative(MARKER_FONT_SIZE/2)-relative(3)], :width => 30, :align => :center, :color => text_color
 
     end
 
