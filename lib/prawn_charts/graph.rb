@@ -109,7 +109,6 @@ module PrawnCharts
 
       self.theme = PrawnCharts::Themes::Standard.new
       self.renderer = PrawnCharts::Renderers::Standard.new
-      #self.rasterizer = PrawnCharts::Rasterizers::MiniMagickRasterizer.new
       self.value_formatter = PrawnCharts::Formatters::Number.new
       self.key_formatter = PrawnCharts::Formatters::Number.new
 
@@ -120,7 +119,7 @@ module PrawnCharts
       raise ArgumentError, "Some options provided are not supported: #{options.keys.join(' ')}." if options.size > 0
     end
     
-    # Renders the graph in it's current state to an SVG object.
+    # Renders the graph in it's current state into a PDF object.
     #
     # Options:
     # size:: An array indicating the size you wish to render the graph.  ( [x, y] )
@@ -129,10 +128,6 @@ module PrawnCharts
     # min_value:: Overrides the calculated minimum value used for the graph.
     # max_value:: Overrides the calculated maximum value used for the graph.
     # renderer:: Provide a Renderer object to use instead of the default. 
-    #
-    # For other image formats:
-    # as:: File format to render to ('PNG', 'JPG', etc)
-    # to:: Name of file to save graph to, if desired.  If not provided, image is returned as blob/string.
     def render(pdf,options = {})
       options[:theme]               ||= theme
       options[:value_formatter]     ||= value_formatter
@@ -159,21 +154,16 @@ module PrawnCharts
       #   options[:size] = [800, (800.to_f * (options[:actual_size][1].to_f / options[:actual_size][0].to_f))]
       # end
 
-      if !options[:renderer].nil?
-        options[:renderer].render(pdf,options)
-      else
-        self.renderer.render(pdf,options)
+      @at = options[:at] || [0,0]
+      @width = (options[:size] ? options[:size][0] : 600)
+      @height = (options[:size] ? options[:size][1] : 360)
+      pdf.bounding_box([@at[0],@at[1]], :width => @width, :height => @height) do
+        if !options[:renderer].nil?
+          options[:renderer].render(pdf,options)
+        else
+          self.renderer.render(pdf,options)
+        end
       end
-      #svg = ( options[:renderer].nil? ? self.renderer.render( options ) : options[:renderer].render( options ) )
-      
-      # SVG to file.
-      #if options[:to] && options[:as].nil?
-      #  File.open(options[:to], 'w') { |file|
-      #    file.write(svg)
-      #  }
-      #end
-      
-      #options[:as] ? rasterizer.rasterize(svg, options) : svg
     end
     
     def renderer=(options)
@@ -189,32 +179,6 @@ module PrawnCharts
     
     def remove(id)
       renderer.remove(id)
-    end
-
-    # Draws X and Y axis rulers beginning at the margin box origin. Used on
-    # examples.
-    #
-    def stroke_axis(pdf,options={})
-      options = { :height => (pdf.cursor - 20).to_i,
-        :width => pdf.bounds.width.to_i
-      }.merge(options)
-
-      pdf.dash(1, :space => 4)
-      pdf.stroke_horizontal_line(-21, options[:width], :at => 0)
-      pdf.stroke_vertical_line(-21, options[:height], :at => 0)
-      pdf.undash
-
-      pdf.fill_circle [0, 0], 1
-
-      (100..options[:width]).step(100) do |point|
-        pdf.fill_circle [point, 0], 1
-        pdf.draw_text point, :at => [point-5, -10], :size => 7
-      end
-
-      (100..options[:height]).step(100) do |point|
-        pdf.fill_circle [0, point], 1
-        pdf.draw_text point, :at => [-17, point-2], :size => 7
-      end
     end
 
     private

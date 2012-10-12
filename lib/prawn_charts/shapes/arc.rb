@@ -4,9 +4,6 @@ module PrawnCharts
 
     # (adapted from prawn-shapes by Daniel Nelson)
     module Arc
-      HALF_PI = Math::PI / 2.0
-      THREE_HALVES_PI = 3.0 / 2.0 * Math::PI
-      TWO_PI = 2.0 * Math::PI
 
       # options must include :radius and :side
       # side is either :left or :right
@@ -16,11 +13,11 @@ module PrawnCharts
       def half_circle(center, options)
         case options[:side]
         when :left
-          start_angle = HALF_PI
-          end_angle = THREE_HALVES_PI
+          start_angle = Math::HALF_PI
+          end_angle = Math::THREE_HALVES_PI
         when :right
-          start_angle = THREE_HALVES_PI
-          end_angle = HALF_PI
+          start_angle = Math::THREE_HALVES_PI
+          end_angle = Math::HALF_PI
         end
         pie_slice(center,
           :radius => options[:radius],
@@ -38,16 +35,16 @@ module PrawnCharts
         case options[:quadrant]
         when 1
           start_angle = 0
-          end_angle = HALF_PI
+          end_angle = Math::HALF_PI
         when 2
-          start_angle = HALF_PI
+          start_angle = Math::HALF_PI
           end_angle = Math::PI
         when 3
           start_angle = Math::PI
-          end_angle = THREE_HALVES_PI
+          end_angle = Math::THREE_HALVES_PI
         when 4
-          start_angle = THREE_HALVES_PI
-          end_angle = TWO_PI
+          start_angle = Math::THREE_HALVES_PI
+          end_angle = Math::TWO_PI
         end
         pie_slice(center,
           :radius => options[:radius],
@@ -85,12 +82,12 @@ module PrawnCharts
         offset = options[:offset]
         start_angle = options[:start_angle]
         end_angle = options[:end_angle]
-        start_angle = start_angle % TWO_PI
-        end_angle = end_angle % TWO_PI
+        start_angle = start_angle % Math::TWO_PI
+        end_angle = end_angle % Math::TWO_PI
         return [center[0],center[1]] if start_angle == end_angle
-        end_angle = end_angle + TWO_PI if end_angle < start_angle
+        end_angle = end_angle + Math::TWO_PI if end_angle < start_angle
         mid_angle =  start_angle+(end_angle-start_angle)/2.0
-        point = [center[0]+offset*Math.cos(mid_angle), center[1]-offset*Math.sin(mid_angle)]
+        point = [center[0]+offset*Math.cos(mid_angle), center[1]+offset*Math.sin(mid_angle)]
         point
       end
 
@@ -144,25 +141,25 @@ module PrawnCharts
         start_angle = options[:start_angle]
         end_angle = options[:end_angle]
         return if start_angle == end_angle
-        start_angle = start_angle % TWO_PI
-        end_angle = end_angle % TWO_PI
+        start_angle = start_angle % Math::TWO_PI
+        end_angle = end_angle % Math::TWO_PI
         return circle_at(center, :radius => radius) if start_angle == end_angle
 
-        end_angle = end_angle + TWO_PI if end_angle < start_angle
+        end_angle = end_angle + Math::TWO_PI if end_angle < start_angle
 
         delta = end_angle - start_angle
-        quadrants = (delta / HALF_PI).ceil
+        quadrants = (delta / Math::HALF_PI).ceil
 
         vertices = []
         quadrants.times do |i|
-          from_angle = start_angle + HALF_PI * i
+          from_angle = start_angle + Math::HALF_PI * i
 
           if i == quadrants - 1 then to_angle = end_angle
-          else to_angle = from_angle + HALF_PI
+          else to_angle = from_angle + Math::HALF_PI
           end
 
           delta = to_angle - from_angle
-          handle_multiplier = ::Prawn::Graphics::KAPPA * delta / HALF_PI * radius
+          handle_multiplier = ::Prawn::Graphics::KAPPA * delta / Math::HALF_PI * radius
 
           # negate the angles so as to get the stated orientation of angles
           # start_angle = -start_angle

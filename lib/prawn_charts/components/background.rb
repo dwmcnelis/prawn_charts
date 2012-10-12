@@ -2,12 +2,15 @@ module PrawnCharts
   module Components
     class Background < Base
       def draw(pdf, bounds, options={})
-        #pdf.text_box "Background.draw bounds #{bounds}, options #{options}", :at => [10, 600]
-        # Render background (maybe)
-        if options[:theme].background.class == Array
-          pdf.fill_gradient [0,bounds[:height]], bounds[:width], bounds[:height], options[:theme].background[0], options[:theme].background[1]
-          pdf.fill_rectangle [0,bounds[:height]], bounds[:width], bounds[:height]
-        end
+        pdf.axis
+        theme = options[:theme] || PrawnCharts::Themes::Theme.default
+        background = theme.background || ['ffffff','ffffff']
+        start_color = background[0] || 'ffffff'
+        stop_color = background[1] || 'ffffff'
+        width = bounds[:width] || 540
+        height = bounds[:height] || 720
+        pdf.fill_gradient [0,height], width, height, start_color, 'ffffff'
+        pdf.fill_rectangle [0,height], width, height
       end
     end
   end

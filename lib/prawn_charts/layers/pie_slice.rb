@@ -2,9 +2,6 @@ module PrawnCharts::Layers
   # Basic Pie Chart Slice..
     
   class PieSlice < Base
-    HALF_PI = Math::PI/2.0
-    THREE_HALVES_PI = 3.0/2.0*Math::PI
-    TWO_PI = 2.0*Math::PI
     MARKER_OFFSET_RATIO = 1.2
     MARKER_FONT_SIZE = 6
     
@@ -15,6 +12,9 @@ module PrawnCharts::Layers
     attr_accessor :center_x, :center_y
     
     def draw(pdf, coords, options = {})
+      #pdf.text_box "PieSlice.draw coords #{coords}, options #{options}", :at => [10, 620]
+      pdf.text_box "PieSlice.draw coords #{coords}", :at => [10, 620]
+      @theme = options[:theme] || PrawnCharts::Themes::Standard.new
       # Scaler is the multiplier to normalize the values to a percentage across
       # the Pie Chart
       @scaler = options[:scaler] || 1
@@ -29,7 +29,6 @@ module PrawnCharts::Layers
       # Diameter of the pie chart defaults to 70% of the height
       @diameter = relative(options[:diameter]) || relative(@options[:diameter]) || relative(70.0)
 
-      theme = options[:theme]
 
       # Stroke
       stroke = options[:stroke] || @options[:stroke] || "none"
@@ -53,12 +52,12 @@ module PrawnCharts::Layers
       percent = @scaler*sum_values
 
       # Calculate the Radian Start Point
-      start_angle = (@percent_used/100.0*TWO_PI+@offset_angle) % TWO_PI
+      start_angle = (@percent_used/100.0*Math::TWO_PI+@offset_angle) % Math::TWO_PI
       # Calculate the Radian End Point
-      end_angle = ((@percent_used+percent)/100.0*TWO_PI+@offset_angle) % TWO_PI
-      end_angle = end_angle + TWO_PI if end_angle < start_angle
+      end_angle = ((@percent_used+percent)/100.0*Math::TWO_PI+@offset_angle) % Math::TWO_PI
+      end_angle = end_angle + Math::TWO_PI if end_angle < start_angle
 
-      mid_angle = (start_angle+((end_angle-start_angle)/2.0)) % TWO_PI
+      mid_angle = (start_angle+((end_angle-start_angle)/2.0)) % Math::TWO_PI
 
       dx = options[:explode] ? (Math.cos(mid_angle)*relative(options[:explode])) : 0
       dy = options[:explode] ? (Math.sin(mid_angle)*relative(options[:explode])) : 0
@@ -103,7 +102,7 @@ module PrawnCharts::Layers
         paleblue40 = "f4f8fa"
 
         center = [@center_x,@center_y]
-        pdf.stroke_color theme.outlines[0]
+        pdf.stroke_color @theme.outlines[0]
         pdf.fill_color color
         pdf.fill_pie_slice(center,
                        :radius => radius,
@@ -136,7 +135,7 @@ module PrawnCharts::Layers
       #  'font-family' => options[:theme].font_family,
       #  :fill => (options[:theme].marker || 'black').to_s,
       #  'text-anchor' => 'middle')
-      text_color = (theme.marker || '000000').to_s
+      text_color = (@theme.marker || '000000').to_s
       #w = bounds[:width]   :width => w,
       pdf.fill_color text_color
       pdf.text_box "#{sprintf('%d', percent)}%", :at => [text_x-relative(4),text_y+relative(MARKER_FONT_SIZE/2)-relative(3)], :width => 30, :align => :center, :color => text_color

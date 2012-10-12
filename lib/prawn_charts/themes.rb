@@ -9,6 +9,12 @@ module PrawnCharts
     #
     # See PrawnCharts::Themes::Theme#instantiate for examples.
     class Theme
+      # class methods
+      class << self
+        def default
+          new PrawnCharts::Themes::Standard.new
+        end
+      end # class methods
       attr_accessor :background     # Background color or array of two colors
       attr_accessor :colors         # Array of colors for data graphs
       attr_accessor :outlines       # Array of colors for outlines of elements for data graphs

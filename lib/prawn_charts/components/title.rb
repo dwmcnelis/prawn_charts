@@ -2,24 +2,17 @@ module PrawnCharts
   module Components
     class Title < Base
       def draw(pdf, bounds, options={})
-        #pdf.text_box "Title.draw bounds #{bounds}, options #{options}", :at => [10, 600]
-        x = bounds[:width]/2
-        y = bounds[:height]
-        w = bounds[:width]
-        theme = options[:theme]
-        pdf.fill_color theme.title
-        pdf.text_box "title #{options[:title]}, x #{x}, y #{y}, w #{w}, color #{theme.title}", :at => [10, 600]
+        @theme = options[:theme] || PrawnCharts::Themes::Theme.default
+        @font_family = @theme.font_family || "Helvetica"
+        @font_size = @theme.title_font_size || pdf.font_size
+        @text_color =  @theme.title || '000000'
+        pdf.log_text "title #{options[:title]}, x #{bounds[:width]/2.0}, y #{bounds[:height]}, w #{ bounds[:width]}, color #{@text_color}"
+
         if options[:title]
-          pdf.text_box options[:title], :at => [x,y], :width => w, :align => :center, :color => theme.title
-          #pdf.text(options[:title],
-          #  :class => 'title',
-          #  :x => (bounds[:width] / 2),
-          #  :y => bounds[:height],
-          #  'font-size' => options[:theme].title_font_size || relative(100),
-          #  'font-family' => options[:theme].font_family,
-          #  :fill => options[:theme].marker,
-          #  :stroke => 'none', 'stroke-width' => '0',
-          #  'text-anchor' => (@options[:text_anchor] || 'middle'))
+          pdf.fill_color @text_color
+          pdf.font(@font_family) do
+            pdf.text_box options[:title], :at => [bounds[:width]/2.0,bounds[:height]], :width =>  bounds[:width], :align => :center, :color => @theme.title, :size => @theme.title_font_size
+          end
         end
       end
     end

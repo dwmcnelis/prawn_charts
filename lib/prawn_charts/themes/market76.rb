@@ -23,7 +23,7 @@ module PrawnCharts
         paleblue40 = "f4f8fa"
         white = "ffffff"
         super({
-          :background => [paleblue30, white],
+          :background => [paleblue40, white],
           :marker => slate_blue,
           :title => slate_blue,
           :outlines => [slate_blue,blue100],
