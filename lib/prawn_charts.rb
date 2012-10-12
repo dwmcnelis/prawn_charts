@@ -1,4 +1,3 @@
-#require 'builder'
 
 require 'prawn_charts/helpers'
 require 'prawn_charts/graph_state'

@@ -79,19 +79,19 @@ module PrawnCharts::Components
         
         # "#{x} #{y} #{@line_height} #{size}"
         
-        pdf.rect(:x => x, 
-                 :y => y, 
-                 :width => size, 
-                 :height => size,
-                 :fill => legend_info[idx][:color])
+        #pdf.rect(:x => x,
+        #         :y => y,
+        #         :width => size,
+        #         :height => size,
+        #         :fill => legend_info[idx][:color])
         
-        pdf.text(legend_info[idx][:title], 
-                 :x => x + @line_height, 
-                 :y => y + text_height * 0.75,
-          'font-size' => text_height, 
-          'font-family' => options[:theme].font_family,
-        :style => "color: #{options[:theme].marker || 'white'}",
-        :fill => (options[:theme].marker || 'white'))
+        #pdf.text(legend_info[idx][:title],
+        #         :x => x + @line_height,
+        #         :y => y + text_height * 0.75,
+        #  'font-size' => text_height,
+        #  'font-family' => options[:theme].font_family,
+        #:style => "color: #{options[:theme].marker || 'white'}",
+        #:fill => (options[:theme].marker || 'white'))
       end
     end   # draw
     

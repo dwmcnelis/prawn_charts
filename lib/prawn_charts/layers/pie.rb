@@ -24,27 +24,22 @@ module PrawnCharts::Layers
     # Another Example:
     #   graph.title = "Scruff-Pac!"
     #   graph.renderer = PrawnCharts::Renderers::Pie.new
-    #   graph.add :pie, :diameter => 40, :degree_offset => 30 do |pie|
+    #   graph.add :pie, :diameter => 40, :offset_angle => 30 do |pie|
     #     pie.add :pie_slice, '', [160], :preferred_color => "yellow", :shadow => true,
     #             :shadow_x => -1, :shadow_y => 1, :shadow_color=>"black", :shadow_opacity => 0.4
     #     pie.add :pie_slice, '', [50], :preferred_color => "green", :explode => 5, :diameter => 20,
     #           :shadow => true, :shadow_x => -1, :shadow_y => 1, :shadow_color => "black", :shadow_opacity => 0.4
     #   end
     # 
-    #   graph.add :pie, :diameter => 3, :center_x => 48, :center_y=> 37, :degree_offset => 20 do |pie|
+    #   graph.add :pie, :diameter => 3, :center_x => 48, :center_y=> 37, :offset_angle => 20 do |pie|
     #     pie.add :pie_slice, '', [160], :preferred_color => "blue", :stroke => "black"
     #   end
-    
-    
-    # Setup Constants
-    RADIANS = Math::PI/180
 
     attr_accessor :diameter
     attr_accessor :percent_used
-    attr_accessor :degree_offset
+    attr_accessor :offset_angle
     attr_accessor :scaler
     attr_accessor :center_x, :center_y
-
     
     # The initialize method passes itself to the block, and since Pie is a
     # LayerContainer, layers (pie slice) can be added just as if they were being
@@ -83,7 +78,7 @@ module PrawnCharts::Layers
       
       @scaler = 100.0 / total
       
-      @percent_used = 30
+      @percent_used = 0
       
       layers.each do |layer|
         layer_options = options.dup
