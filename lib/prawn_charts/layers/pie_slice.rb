@@ -16,8 +16,7 @@ module PrawnCharts
       attr_accessor :center_x, :center_y
 
       def draw(pdf, coords, options = {})
-        #pdf.text_box "PieSlice.draw coords #{coords}, options #{options}", :at => [10, 620]
-        pdf.text_box "PieSlice.draw coords #{coords}", :at => [10, 200]
+        #pdf.log_text "pie_slice coords #{coords}, options #{options}"
         theme = options[:theme] || PrawnCharts::Themes::Theme.default
         # Scaler is the multiplier to normalize the values to a percentage across
         # the Pie Chart
@@ -66,8 +65,8 @@ module PrawnCharts
         dx = options[:explode] ? (Math.cos(mid_angle)*relative(options[:explode])) : 0
         dy = options[:explode] ? (Math.sin(mid_angle)*relative(options[:explode])) : 0
 
-        @center_x  = @center_x + dx + shift_x
-        @center_y  = @center_y + dy + shift_y
+        @center_x  = @center_x + dx #+ shift_x
+        @center_y  = @center_y + dy #+ shift_y
 
         # Calculate the beginning coordinates
         x_start = @center_x + (Math.cos(start_angle)*radius)

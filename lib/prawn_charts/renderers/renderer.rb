@@ -35,6 +35,8 @@ module PrawnCharts
         #svg.svg(:xmlns => "http://www.w3.org/2000/svg", 'xmlns:xlink' => "http://www.w3.org/1999/xlink", :width => options[:size].first, :height => options[:size].last) {
         #  svg.g(:id => options[:graph_id]) {
         rendertime_renderer.components.each do |component|
+          #bounds = bounds_for( options[:size], component.position, component.size)
+          #pdf.log_text ":#{component.id} canvas #{options[:size][0]}x#{options[:size][1]} position #{component.position[0]},#{component.position[1]} size #{component.size[0]},#{component.size[1]} bounds #{bounds}"
           component.render(pdf,
             bounds_for( options[:size], component.position, component.size ),
             options)

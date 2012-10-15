@@ -113,7 +113,7 @@ module PrawnCharts
       self.value_formatter = PrawnCharts::Formatters::Number.new
       self.key_formatter = PrawnCharts::Formatters::Number.new
 
-      %w(title x_legend y_legend theme layers default_type value_formatter point_markers point_markers_rotation point_markers_ticks rasterizer renderer key_formatter).each do |arg|
+      %w(title x_legend y_legend theme layers default_type value_formatter point_markers point_markers_rotation point_markers_ticks rasterizer renderer key_formatter marks).each do |arg|
         self.send("#{arg}=".to_sym, options.delete(arg.to_sym)) unless options[arg.to_sym].nil?
       end
 
@@ -146,6 +146,7 @@ module PrawnCharts
       options[:min_key]             ||= bottom_key
       options[:max_key]             ||= top_key
       options[:graph]               ||= self
+      options[:marks]             ||= marks
 
       # Removed for now.
       # Added for making smaller fonts more legible, but may not be needed after all.

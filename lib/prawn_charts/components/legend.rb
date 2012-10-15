@@ -8,16 +8,19 @@ module PrawnCharts
       FONT_SIZE = 80
 
       def draw(pdf, bounds, options={})
-        x_offset = 10
-        y_offset = 10
+        if (options[:marks])
+          pdf.stroke_color 'ff0000'
+          pdf.fill_color 'ff0000'
+          pdf.fill_and_stroke_centroid([pdf.bounds.left+bounds[:x],pdf.bounds.bottom+bounds[:y]],:radius => 3)
+          pdf.crop_marks([pdf.bounds.left+bounds[:x],pdf.bounds.bottom+bounds[:y]+bounds[:height]],bounds[:width],bounds[:height])
+        end
         vertical = options[:vertical_legend]
         legend_info = relevant_legend_info(options[:layers])
         @line_height, x, y, size = 0
         if vertical
           set_line_height = 0.08 * bounds[:height]
           @line_height = bounds[:height] / legend_info.length
-          @line_height = set_line_height if @line_height >
-            set_line_height
+          @line_height = set_line_height if @line_height > set_line_height
         else
           set_line_height = 0.90 * bounds[:height]
           @line_height = set_line_height
@@ -45,7 +48,7 @@ module PrawnCharts
           theme = options[:theme] || PrawnCharts::Themes::Theme.default
           color = legend_info[idx][:color]
           pdf.fill_color = color
-          pdf.fill_rectangle [x_offset+x,y_offset+y+size], size, size
+          pdf.fill_rectangle [pdf.bounds.left+bounds[:x]+x,pdf.bounds.bottom+bounds[:y]+y+size], size, size
           #pdf.rect(:x => x,
           #         :y => y,
           #         :width => size,
@@ -54,11 +57,12 @@ module PrawnCharts
           font_family = theme.font_family || "Helvetica"
           font_size = text_height
           text_color =  theme.marker || 'fffffff'
-          pdf.log_text("Legend #{options[:title]}, x #{bounds[:width]/2.0}, y #{bounds[:height]}, w #{ bounds[:width]}, font_family #{font_family}, font_size #{font_size}, text_color #{text_color}")
+          #pdf.log_text("Legend #{options[:title]}, x #{bounds[:width]/2.0}, y #{bounds[:height]}, w #{ bounds[:width]}, font_family #{font_family}, font_size #{font_size}, text_color #{text_color}")
           pdf.font(font_family) do
             pdf.fill_color text_color
             #pdf.text_box legend_info[idx][:title], :at => [x + @line_height,y + text_height * 0.75], :width =>  bounds[:width], :align => :left, :color => text_color, :size => font_size
-            pdf.text_box legend_info[idx][:title], :at => [x_offset+x+2*size,y_offset+y+size], :width =>  bounds[:width], :align => :left, :color => text_color, :size => font_size
+            pdf.text_box legend_info[idx][:title], :at => [pdf.bounds.left+bounds[:x]+x+2*size,pdf.bounds.bottom+bounds[:y]+y+size], :width =>  bounds[:width], :align => :left, :color => text_color, :size => font_size
+            #pdf.text_box options[:title], :at => [pdf.bounds.left+bounds[:x],pdf.bounds.top-bounds[:y]], :width =>  bounds[:width], :align => :center, :color => text_color, :size => font_size
           end
           #pdf.text(legend_info[idx][:title],
           #         :x => x + @line_height,

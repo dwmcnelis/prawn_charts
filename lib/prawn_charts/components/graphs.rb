@@ -13,6 +13,15 @@ module PrawnCharts
       STACKED_OPACITY = 0.85;
 
       def draw(pdf, bounds, options={})
+        if (options[:marks])
+          pdf.stroke_color 'ff0000'
+          pdf.fill_color 'ff0000'
+          pdf.fill_and_stroke_centroid([pdf.bounds.left+bounds[:x],pdf.bounds.bottom+bounds[:y]],:radius => 3)
+          pdf.fill_and_stroke_centroid([pdf.bounds.left+bounds[:x]+bounds[:width]/2.0,pdf.bounds.bottom+bounds[:y]+bounds[:height]/2.0],:radius => 3)
+          pdf.log_text ":#{id} centroid #{pdf.bounds.left+bounds[:x]+bounds[:width]/2.0},#{pdf.bounds.bottom+bounds[:y]+bounds[:height]/2.0}"
+
+          pdf.crop_marks([pdf.bounds.left+bounds[:x],pdf.bounds.bottom+bounds[:y]+bounds[:height]],bounds[:width],bounds[:height])
+        end
         # If Graph is limited to a category, reject layers outside of it's scope.
         applicable_layers = options[:layers].reject do |l|
           if @options[:only]
@@ -39,9 +48,9 @@ module PrawnCharts
           layer_options[:opacity]     = opacity_for(idx)
           layer_options[:theme]       = options[:theme]
 
-          #pdf.g(:id => "component_#{id}_graph_#{idx}", :class => 'graph_layer') {
-          layer.render(pdf, layer_options)
-          #}
+          pdf.bounding_box([bounds[:x],bounds[:y]+bounds[:height]], :width => bounds[:width], :height => bounds[:height]) do
+            layer.render(pdf, layer_options)
+          end
         end
       end
 

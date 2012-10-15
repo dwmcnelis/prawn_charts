@@ -27,10 +27,10 @@ module PrawnCharts
       def bounds_for(canvas_size, position, size)
         return nil if (position.nil? || size.nil?)
         bounds = {}
-        bounds[:x] = canvas_size.first * (position.first / 100.to_f)
-        bounds[:y] = canvas_size.last  * (position.last  / 100.to_f)
-        bounds[:width] = canvas_size.first * (size.first / 100.to_f)
-        bounds[:height] = canvas_size.last * (size.last  / 100.to_f)
+        bounds[:x] = canvas_size[0] * (position[0] / 100.to_f)
+        bounds[:y] = canvas_size[1]  * (position[1]  / 100.to_f)
+        bounds[:width] = canvas_size[0] * (size[0] / 100.to_f)
+        bounds[:height] = canvas_size[1] * (size[1]  / 100.to_f)
         bounds
       end
     end # Canvas
