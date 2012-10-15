@@ -1,36 +1,41 @@
-module PrawnCharts::Layers
-  # An 'average' graph.  This graph iterates through all the layers and averages
-  # all the data at each point, then draws a thick, translucent, shadowy line graph
-  # indicating the average values.
-  #
-  # This only looks decent in pdf mode.  ImageMagick doesn't retain the transparency
-  # for some reason, creating a massive black line.  Any help resolving this would
-  # be useful.
-  class Average < Base
-    attr_reader :layers
-    
-    # Returns new Average graph.
-    def initialize(options = {})
-      # Set self's relevant_data to false.  Otherwise we get stuck in a
-      # recursive loop.
-      super(options.merge({:relevant_data => false}))
-      
-      # The usual :points argument is actually layers for Average, name it as such
-      @layers = options[:points] 
-    end
-    
-    # Render average graph.
-    def draw(pdf, coords, options = {})
-      pdf.polyline( :points => coords.join(' '), :fill => 'none', :stroke => 'black',
-                    'stroke-width' => relative(5), 'opacity' => '0.4')
-    end
 
-    protected
+require 'prawn_charts/layers/layer'
+
+module PrawnCharts
+  module Layers
+
+    # An 'average' graph.  This graph iterates through all the layers and averages
+    # all the data at each point, then draws a thick, translucent, shadowy line graph
+    # indicating the average values.
+    #
+    # This only looks decent in pdf mode.  ImageMagick doesn't retain the transparency
+    # for some reason, creating a massive black line.  Any help resolving this would
+    # be useful.
+    class Average < Layer
+      attr_reader :layers
+
+      # Returns new Average graph.
+      def initialize(options = {})
+        # Set self's relevant_data to false.  Otherwise we get stuck in a
+        # recursive loop.
+        super(options.merge({:relevant_data => false}))
+
+        # The usual :points argument is actually layers for Average, name it as such
+        @layers = options[:points]
+      end
+
+      # Render average graph.
+      def draw(pdf, coords, options = {})
+        pdf.polyline( :points => coords.join(' '), :fill => 'none', :stroke => 'black',
+          'stroke-width' => relative(5), 'opacity' => '0.4')
+      end
+
+      protected
       # Override default generate_coordinates method to iterate through the layers and
       # generate coordinates based on the average data points.
       def generate_coordinates(options = {})
         key_layer = layers.find { |layer| layer.relevant_data? }
-      
+
         options[:point_distance] = width / (key_layer.points.size - 1).to_f
 
         coords = []
@@ -57,6 +62,8 @@ module PrawnCharts::Layers
 
         return coords
       end
-  
-  end
-end
+
+    end # Average
+
+  end # Layers
+end # PrawnCharts

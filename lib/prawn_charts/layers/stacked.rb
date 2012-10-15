@@ -1,83 +1,90 @@
-module PrawnCharts::Layers
-  # Provides a generic way for stacking graphs.  This may or may not
-  # do what you'd expect under every situation, but it at least kills
-  # a couple birds with one stone (stacked bar graphs and stacked area
-  # graphs work fine).
-  class Stacked < Base
-    include PrawnCharts::Helpers::LayerContainer
-    
-    # Returns new Stacked graph.
-    #
-    # You can provide a block for easily adding layers during (just after) initialization.
-    # Example:
-    #   Stacked.new do |stacked|
-    #     stacked << PrawnCharts::Layers::Line.new( ... )
-    #     stacked.add(:bar, 'My Bar', [...])
-    #   end
-    #
-    # The initialize method passes itself to the block, and since stacked is a LayerContainer,
-    # layers can be added just as if they were being added to Graph.
-    def initialize(options={}, &block)
-      super(options)
 
-      block.call(self)    # Allow for population of data with a block during initialization.
-    end
-    
-    # Overrides Base#render to fiddle with layers' points to achieve a stacked effect.
-    def render(pdf, options = {})
-      #TODO ensure this works with new points
-      current_points = points
-      
-      layers.each do |layer|
-        real_points = layer.points
-        layer.points = current_points
-        layer_options = options.dup
-        layer_options[:color] = layer.preferred_color || layer.color || options[:theme].next_color          
-        layer.render(pdf, layer_options)
-        options.merge(layer_options)
-        layer.points = real_points
-        
-        layer.points.each_with_index { |val, idx| current_points[idx] -= val }
+require 'prawn_charts/layers/layer'
+
+module PrawnCharts
+  module Layers
+
+    # Provides a generic way for stacking graphs.  This may or may not
+    # do what you'd expect under every situation, but it at least kills
+    # a couple birds with one stone (stacked bar graphs and stacked area
+    # graphs work fine).
+    class Stacked < Layer
+      include PrawnCharts::Helpers::LayerContainer
+
+      # Returns new Stacked graph.
+      #
+      # You can provide a block for easily adding layers during (just after) initialization.
+      # Example:
+      #   Stacked.new do |stacked|
+      #     stacked << PrawnCharts::Layers::Line.new( ... )
+      #     stacked.add(:bar, 'My Bar', [...])
+      #   end
+      #
+      # The initialize method passes itself to the block, and since stacked is a LayerContainer,
+      # layers can be added just as if they were being added to Graph.
+      def initialize(options={}, &block)
+        super(options)
+
+        block.call(self)    # Allow for population of data with a block during initialization.
       end
-    end
 
-    # A stacked graph has many data sets.  Return legend information for all of them.
-    def legend_data
-      if relevant_data?
-        retval = []
+      # Overrides Base#render to fiddle with layers' points to achieve a stacked effect.
+      def render(pdf, options = {})
+        #TODO ensure this works with new points
+        current_points = points
+
         layers.each do |layer|
-          retval << layer.legend_data
-        end
-        retval
-      else
-        nil
-      end
-    end
+          real_points = layer.points
+          layer.points = current_points
+          layer_options = options.dup
+          layer_options[:color] = layer.preferred_color || layer.color || options[:theme].next_color
+          layer.render(pdf, layer_options)
+          options.merge(layer_options)
+          layer.points = real_points
 
-    # TODO, special points accessor  
-    def points
-      longest_arr = layers.inject(nil) do |longest, layer|
-        longest = layer.points if (longest.nil? || longest.size < layer.points.size)
-        longest
+          layer.points.each_with_index { |val, idx| current_points[idx] -= val }
+        end
       end
-      
-      summed_points = (0...longest_arr.size).map do |idx|
-        layers.inject(nil) do |sum, layer|
-          if sum.nil? && !layer.points[idx].nil?
-            sum = layer.points[idx]
-          elsif !layer.points[idx].nil?
-            sum += layer.points[idx]
+
+      # A stacked graph has many data sets.  Return legend information for all of them.
+      def legend_data
+        if relevant_data?
+          retval = []
+          layers.each do |layer|
+            retval << layer.legend_data
           end
-          
-          sum
+          retval
+        else
+          nil
         end
       end
 
-      summed_points
-    end
+      # TODO, special points accessor
+      def points
+        longest_arr = layers.inject(nil) do |longest, layer|
+          longest = layer.points if (longest.nil? || longest.size < layer.points.size)
+          longest
+        end
 
-    def points=(val)
-      throw ArgumentsError, "Stacked layers cannot accept points, only other layers."
-    end
-  end
-end
+        summed_points = (0...longest_arr.size).map do |idx|
+          layers.inject(nil) do |sum, layer|
+            if sum.nil? && !layer.points[idx].nil?
+              sum = layer.points[idx]
+            elsif !layer.points[idx].nil?
+              sum += layer.points[idx]
+            end
+
+            sum
+          end
+        end
+
+        summed_points
+      end
+
+      def points=(val)
+        throw ArgumentsError, "Stacked layers cannot accept points, only other layers."
+      end
+    end # Stacked
+
+  end # Layers
+end # PrawnCharts

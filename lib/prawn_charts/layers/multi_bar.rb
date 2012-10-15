@@ -1,12 +1,15 @@
-module PrawnCharts::Layers
-  # Standard multi_bar graph.
-  class MultiBar < Bar
-  
-    
 
-    protected
-    
-      # Due to the size of the bar graph, X-axis coords must 
+require 'prawn_charts/layers/layer'
+
+module PrawnCharts
+  module Layers
+
+    # Multi_bar graph.
+    class MultiBar < Layer
+
+      protected
+
+      # Due to the size of the bar graph, X-axis coords must
       # be squeezed so that the bars do not hang off the ends
       # of the graph.
       #
@@ -16,7 +19,7 @@ module PrawnCharts::Layers
       #
       # Update : x-axis coords for lines and area charts should now line
       # up with the center of bar charts.
-      
+
       def generate_coordinates(options = {})
         @point_width = (width / points.size)
         @point_space = @point_width * 0.1
@@ -24,12 +27,12 @@ module PrawnCharts::Layers
         @bar_width = @point_width/options[:num_bars]
         @bar_space = @bar_width * 0.1
         @bar_width = @bar_width * 0.9
-        
+
         #options[:point_distance] = (width - (width / points.size)) / (points.size - 1).to_f
-          
+
         #TODO more array work with index, try to rework to be accepting of hashes
-        coords = (0...points.size).map do |idx| 
-          
+        coords = (0...points.size).map do |idx|
+
           x_coord = (@point_width * idx) + @point_space/2 + @point_space*idx + @bar_width * options[:position] +   @bar_space*(options[:position].to_f - 0.5)
 
           relative_percent = ((points[idx] == min_value) ? 0 : ((points[idx] - min_value) / (max_value - min_value).to_f))
@@ -38,5 +41,7 @@ module PrawnCharts::Layers
         end
         coords
       end
-  end
-end
+    end # Multi-Bar
+
+  end # Layers
+end # PrawnCharts

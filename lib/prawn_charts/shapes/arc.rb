@@ -62,11 +62,19 @@ module PrawnCharts
                   :start_angle => 0,
                   :end_angle => Math::HALF_PI,
                   :stroke_both_sides => true)
+        open_curve(arc_vertices(center,
+          :radius => radius,
+          :start_angle => Math::HALF_PI,
+          :end_angle => Math::PI))
         pie_slice(center,
                   :radius => radius,
                   :start_angle => Math::PI,
                   :end_angle => Math::THREE_HALVES_PI,
                   :stroke_both_sides => true)
+        open_curve(arc_vertices(center,
+          :radius => radius,
+          :start_angle => Math::THREE_HALVES_PI,
+          :end_angle => 0))
       end
 
       # options must include :radius, :start_angle, and :end_angle

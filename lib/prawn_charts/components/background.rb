@@ -1,6 +1,10 @@
+
+require 'prawn_charts/components/component'
+
 module PrawnCharts
   module Components
-    class Background < Base
+
+    class Background < Component
       def draw(pdf, bounds, options={})
         pdf.axis
         theme = options[:theme] || PrawnCharts::Themes::Theme.default
@@ -14,6 +18,7 @@ module PrawnCharts
         pdf.stroke_color 'ff0000'
         pdf.crop_marks([0,height], width, height)
       end
-    end
-  end
-end
+    end # Background
+
+  end # Components
+end # PrawnCharts

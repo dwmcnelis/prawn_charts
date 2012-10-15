@@ -1,10 +1,12 @@
 
+require 'prawn_charts/themes/theme'
+
 module PrawnCharts
   module Themes
 
-    # Standard theme
+    # Default theme
     # Based on http://www.wellstyled.com/tools/colorscheme2/index-en.html?tetrad;50;0;255;1;-1;1;-0.6;0.1;1;0.6;1;1;-1;1;-0.6;0.1;1;0.6;1;1;-1;1;-0.6;0.1;1;0.6;1;1;-1;1;-0.6;0.1;1;0.6;1;0
-    class Standard < Theme
+    class Default < Theme
       def initialize
         super({
           :background => ['ffffff', 'ffffff'],

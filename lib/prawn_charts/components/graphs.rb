@@ -1,22 +1,25 @@
+
+require 'prawn_charts/components/component'
+
 module PrawnCharts
   module Components
-    
+
     # Component for displaying Graphs layers.
     #
     # Is passed all graph layers from the Graph object.
     #
     # (This may change as the capability for Graph filtering and such fills out.)
-    class Graphs < Base
+    class Graphs < Component
       STACKED_OPACITY = 0.85;
-      
+
       def draw(pdf, bounds, options={})
         # If Graph is limited to a category, reject layers outside of it's scope.
-        applicable_layers = options[:layers].reject do |l| 
+        applicable_layers = options[:layers].reject do |l|
           if @options[:only]
             (l.options[:category].nil? && l.options[:categories].nil?) ||
-            (!l.options[:category].nil? && l.options[:category] != @options[:only]) || 
-            (!l.options[:categories].nil? && !l.options[:categories].include?(@options[:only]))
-          else 
+              (!l.options[:category].nil? && l.options[:category] != @options[:only]) ||
+              (!l.options[:categories].nil? && !l.options[:categories].include?(@options[:only]))
+          else
             false
           end
         end
@@ -37,16 +40,17 @@ module PrawnCharts
           layer_options[:theme]       = options[:theme]
 
           #pdf.g(:id => "component_#{id}_graph_#{idx}", :class => 'graph_layer') {
-            layer.render(pdf, layer_options)
+          layer.render(pdf, layer_options)
           #}
-        end # applicable_layers
-      end # draw
+        end
+      end
 
       protected
-        def opacity_for(idx)
-          (idx == 0) ? 1.0 : (@options[:stacked_opacity] || STACKED_OPACITY)
-        end
+      def opacity_for(idx)
+        (idx == 0) ? 1.0 : (@options[:stacked_opacity] || STACKED_OPACITY)
+      end
 
-    end #class
-  end
-end
+    end #Graphs
+
+  end # Components
+end # PrawnCharts

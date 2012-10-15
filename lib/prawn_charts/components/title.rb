@@ -1,6 +1,10 @@
+
+require 'prawn_charts/components/component'
+
 module PrawnCharts
   module Components
-    class Title < Base
+
+    class Title < Component
       def draw(pdf, bounds, options={})
         theme = options[:theme] || PrawnCharts::Themes::Theme.default
         font_family = theme.font_family || "Helvetica"
@@ -14,6 +18,7 @@ module PrawnCharts
           end
         end
       end
-    end
-  end
-end
+    end # Title
+
+  end # Components
+end # PrawnCharts

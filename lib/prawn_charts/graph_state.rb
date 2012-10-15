@@ -1,10 +1,10 @@
+
 # State object for holding all of the graph's
 # settings.  Attempting to clean up the
 # graph interface a bit.
-
 module PrawnCharts
-  class GraphState
 
+  class GraphState
     attr_accessor :title
     attr_accessor :x_legend
     attr_accessor :y_legend
@@ -18,7 +18,7 @@ module PrawnCharts
     attr_accessor :rasterizer
     
     def initialize
-      
     end
-  end
-end
+  end # GraphState
+
+end # PrawnCharts

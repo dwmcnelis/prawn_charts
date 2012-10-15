@@ -19,6 +19,6 @@ require 'prawn_charts/renderers'
 # For information on creating your own graph types, see the
 # documentation in PrawnCharts::Layers::Base.
 module PrawnCharts
-end
+end # PrawnCharts
   
 

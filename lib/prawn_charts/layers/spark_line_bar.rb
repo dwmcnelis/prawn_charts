@@ -1,7 +1,11 @@
+
+require 'prawn_charts/layers/layer'
+
 module PrawnCharts
   module Layers
+
     # Experimental, do not use.
-    class SparklineBar < Base
+    class SparklineBar < Layer
     
       def draw(pdf, coords, options = {})
         zero_point = @height / 2.0
@@ -34,6 +38,7 @@ module PrawnCharts
           end
           coords
         end
-    end
-  end
-end
+    end # SparklineBar
+
+  end # Layers
+end # PrawnCharts

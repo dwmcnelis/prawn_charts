@@ -1,4 +1,6 @@
 
+require 'prawn_charts/themes/theme'
+
 module PrawnCharts
   module Themes
 
