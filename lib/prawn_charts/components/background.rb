@@ -11,6 +11,8 @@ module PrawnCharts
         height = bounds[:height] || 720
         pdf.fill_gradient [0,height], width, height, start_color, 'ffffff'
         pdf.fill_rectangle [0,height], width, height
+        pdf.stroke_color 'ff0000'
+        pdf.crop_marks([0,height], width, height)
       end
     end
   end

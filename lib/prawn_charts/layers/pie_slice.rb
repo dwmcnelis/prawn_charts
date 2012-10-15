@@ -14,7 +14,7 @@ module PrawnCharts::Layers
     def draw(pdf, coords, options = {})
       #pdf.text_box "PieSlice.draw coords #{coords}, options #{options}", :at => [10, 620]
       pdf.text_box "PieSlice.draw coords #{coords}", :at => [10, 620]
-      @theme = options[:theme] || PrawnCharts::Themes::Standard.new
+      theme = options[:theme] || PrawnCharts::Themes::Standard.new
       # Scaler is the multiplier to normalize the values to a percentage across
       # the Pie Chart
       @scaler = options[:scaler] || 1
@@ -102,7 +102,13 @@ module PrawnCharts::Layers
         paleblue40 = "f4f8fa"
 
         center = [@center_x,@center_y]
-        pdf.stroke_color @theme.outlines[0]
+
+        pdf.stroke_color 'ff0000'
+        pdf.fill_color 'ff0000'
+        pdf.fill_centroid(center,:radius => 6)
+        pdf.stroke_circle(center,6)
+
+        pdf.stroke_color theme.outlines[0]
         pdf.fill_color color
         pdf.fill_pie_slice(center,
                        :radius => radius,
@@ -135,11 +141,19 @@ module PrawnCharts::Layers
       #  'font-family' => options[:theme].font_family,
       #  :fill => (options[:theme].marker || 'black').to_s,
       #  'text-anchor' => 'middle')
-      text_color = (@theme.marker || '000000').to_s
-      #w = bounds[:width]   :width => w,
-      pdf.fill_color text_color
-      pdf.text_box "#{sprintf('%d', percent)}%", :at => [text_x-relative(4),text_y+relative(MARKER_FONT_SIZE/2)-relative(3)], :width => 30, :align => :center, :color => text_color
-
+      font_family = theme.font_family || "Helvetica"
+      font_size = relative(MARKER_FONT_SIZE)
+      text_color =  theme.marker || '000000'
+      pdf.stroke_color 'ff0000'
+      pdf.fill_color 'ff0000'
+      pdf.fill_centroid([text_x,text_y+relative(MARKER_FONT_SIZE/2)],:radius => 3)
+      pdf.stroke_circle([text_x,text_y+relative(MARKER_FONT_SIZE/2)],3)
+      pdf.font(font_family) do
+        pdf.fill_color text_color
+        pdf.text_box "#{sprintf('%d', percent)}%", :at => [text_x,text_y+relative(MARKER_FONT_SIZE/2)], :width => 30, :align => :center, :color => text_color
+      end
+      pdf.stroke_color 'ff0000'
+      pdf.crop_marks([text_x,text_y+relative(MARKER_FONT_SIZE/2)],30,relative(MARKER_FONT_SIZE))
     end
 
     protected

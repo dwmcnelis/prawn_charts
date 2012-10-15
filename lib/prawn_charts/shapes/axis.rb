@@ -1,7 +1,6 @@
 module PrawnCharts
   module Shapes
 
-    # (adapted from prawn-shapes by Daniel Nelson)
     module Axis
 
       # Draws X and Y axis rulers beginning at the margin box origin. Used on
@@ -17,7 +16,7 @@ module PrawnCharts
         stroke_vertical_line(-21, options[:height], :at => 0)
         undash
 
-        fill_circle [0, 0], 1
+        fill_circle [0, 0], 3
 
         (100..options[:width]).step(100) do |point|
           fill_circle [point, 0], 1

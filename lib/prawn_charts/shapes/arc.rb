@@ -53,6 +53,22 @@ module PrawnCharts
           :stroke_both_sides => options[:stroke_both_sides])
       end
 
+      # options must include :radius
+      #
+      def centroid(center, options)
+        radius = options[:radius] || 10
+        pie_slice(center,
+                  :radius => radius,
+                  :start_angle => 0,
+                  :end_angle => Math::HALF_PI,
+                  :stroke_both_sides => true)
+        pie_slice(center,
+                  :radius => radius,
+                  :start_angle => Math::PI,
+                  :end_angle => Math::THREE_HALVES_PI,
+                  :stroke_both_sides => true)
+      end
+
       # options must include :radius, :start_angle, and :end_angle
       # startAngle and endAngle are in radians
       # if an optional :stroke_both_sides option is true, then both

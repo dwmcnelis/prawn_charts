@@ -1,6 +1,7 @@
 
 require "prawn_charts/shapes/arc"
 require "prawn_charts/shapes/axis"
+require "prawn_charts/shapes/crop_marks"
 require "prawn_charts/shapes/star"
 
 module PrawnCharts
@@ -9,6 +10,7 @@ module PrawnCharts
   module Shapes
     include Arc
     include Axis
+    include CropMarks
     include Star
   end # Shapes
 

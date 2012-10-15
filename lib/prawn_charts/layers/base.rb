@@ -68,11 +68,11 @@ module PrawnCharts::Layers
 
     end
 
-    # Builds pdf code for this graph using the provided Builder object.
+    # Renders the layer to a Prawn PDF Document
     # This method actually generates data needed by this graph, then passes the
     # rendering responsibilities to Base#draw.
     #
-    # pdf:: a Builder object used to create pdf code.
+    # pdf:: a Prawn PDF Document object.
     def render(pdf, options)
       setup_variables(options)
       coords = generate_coordinates(options)
@@ -82,7 +82,7 @@ module PrawnCharts::Layers
 
     # The method called by Base#draw to render the graph.
     #
-    # pdf:: a Builder object to use for creating pdf code.
+    # pdf:: a Prawn PDF Document object.
     # coords:: An array of coordinates relating to the graph's data points.  ie: [[100, 120], [200, 140], [300, 40]]
     # options:: Optional arguments.
     def draw(pdf, coords, options={})
