@@ -7,29 +7,13 @@ module PrawnCharts
     # Market76 theme
     class Market76 < Theme
       def initialize
-        black = "000000"
-        slate_blue40 = "011e29"
-        slate_blue20 = "15323d"
-        slate_blue = "294651"
-        blue20 = "3d5a65"
-        blue40 = "516e79"
-        blue60 = "65828d"
-        blue80 = "7996a1"
-        blue100 = "8daab5"
-        blue120 = "a1bec9"
-        blue140 = "b5d2dd"
-        blue160 = "c9e6f1"
-        pale_blue = "ccd0d2"
-        paleblue20 = "c9e6f1"
-        paleblue30 = "eaeef0"
-        paleblue40 = "f4f8fa"
-        white = "ffffff"
+        palette = {black: "000000", slate_blue40: "011e29", slate_blue20: "15323d", slate_blue: "294651", blue20: "3d5a65", blue40: "516e79", blue60: "65828d", blue80: "7996a1", blue100: "8daab5", blue140: "b5d2dd", blue160: "c9e6f1", pale_blue: "ccd0d2", paleblue20: "c9e6f1", paleblue30: "eaeef0", paleblue40: "f4f8fa", white: "ffffff"}
         super({
-          :background => [paleblue40, white],
-          :marker => slate_blue,
-          :title => slate_blue,
-          :outlines => [slate_blue,blue100],
-          :colors => [slate_blue40, slate_blue, blue20, blue60, blue100, blue140, pale_blue, paleblue40, white]
+          :background => [palette[:paleblue40], palette[:white]],
+          :marker => palette[:slate_blue],
+          :title => palette[:slate_blue],
+          :outlines => [palette[:slate_blue], palette[:blue100]],
+          :colors => [palette[:slate_blue40], palette[:slate_blue], palette[:blue20], palette[:blue60], palette[:blue100], palette[:blue140], palette[:pale_blue], palette[:paleblue40], palette[:white]]
         })
       end
     end # Market76
