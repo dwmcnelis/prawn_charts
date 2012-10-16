@@ -57,11 +57,17 @@ module PrawnCharts
           font_family = theme.font_family || "Helvetica"
           font_size = text_height
           text_color =  theme.marker || 'fffffff'
-          #pdf.log_text("Legend #{options[:title]}, x #{bounds[:width]/2.0}, y #{bounds[:height]}, w #{ bounds[:width]}, font_family #{font_family}, font_size #{font_size}, text_color #{text_color}")
+          if (options[:marks])
+            pdf.stroke_color 'ff0000'
+            pdf.fill_color 'ff0000'
+            pdf.fill_and_stroke_centroid([pdf.bounds.left+bounds[:x]+x+2*size,pdf.bounds.bottom+bounds[:y]+y+size],:radius => 3)
+            pdf.crop_marks([pdf.bounds.left+bounds[:x]+x+2*size,pdf.bounds.bottom+bounds[:y]+y+size],bounds[:width]-2*size,font_size)
+            #pdf.log_text("Legend #{options[:title]}, x #{bounds[:width]/2.0}, y #{bounds[:height]}, w #{ bounds[:width]}, font_family #{font_family}, font_size #{font_size}, text_color #{text_color}")
+          end
           pdf.font(font_family) do
             pdf.fill_color text_color
             #pdf.text_box legend_info[idx][:title], :at => [x + @line_height,y + text_height * 0.75], :width =>  bounds[:width], :align => :left, :color => text_color, :size => font_size
-            pdf.text_box legend_info[idx][:title], :at => [pdf.bounds.left+bounds[:x]+x+2*size,pdf.bounds.bottom+bounds[:y]+y+size], :width =>  bounds[:width], :align => :left, :color => text_color, :size => font_size
+            pdf.text_box legend_info[idx][:title], :at => [pdf.bounds.left+bounds[:x]+x+2*size,pdf.bounds.bottom+bounds[:y]+y+size], :width =>  bounds[:width]-2*size, :align => :left, :color => text_color, :size => font_size
             #pdf.text_box options[:title], :at => [pdf.bounds.left+bounds[:x],pdf.bounds.top-bounds[:y]], :width =>  bounds[:width], :align => :center, :color => text_color, :size => font_size
           end
           #pdf.text(legend_info[idx][:title],

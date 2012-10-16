@@ -16,7 +16,9 @@ module PrawnCharts
       attr_accessor :center_x, :center_y
 
       def draw(pdf, coords, options = {})
-        #pdf.log_text "pie_slice coords #{coords}, options #{options}"
+        if (options[:marks])
+          #pdf.log_text "pie_slice coords #{coords}, options #{options}"
+        end
         theme = options[:theme] || PrawnCharts::Themes::Theme.default
         # Scaler is the multiplier to normalize the values to a percentage across
         # the Pie Chart
@@ -80,12 +82,13 @@ module PrawnCharts
         text_x = @center_x + (Math.cos(mid_angle)*radius*MARKER_OFFSET_RATIO)
         text_y = @center_y + (Math.sin(mid_angle)*radius*MARKER_OFFSET_RATIO)
 
-        pdf.stroke_color 'ff0000'
-        pdf.fill_color 'ff0000'
-        pdf.fill_and_stroke_centroid(center,:radius => 3)
-        pdf.fill_and_stroke_centroid([text_x,text_y],:radius => 3)
+        if (options[:marks])
+          pdf.stroke_color 'ff0000'
+          pdf.fill_color 'ff0000'
+          pdf.fill_and_stroke_centroid(center,:radius => 3)
+          pdf.fill_and_stroke_centroid([text_x,text_y],:radius => 3)
+        end
 
-        #pdf.log_text("pie_slice percent#{percent}")
         # If percentage is really really close to 100% then draw a circle instead!
         if percent >= 99.9999
 
@@ -140,8 +143,10 @@ module PrawnCharts
           pdf.fill_color text_color
           pdf.text_box "#{sprintf('%d', percent)}%", :at => [text_x+dx,text_y+dy], :width => width, :align => :center, :color => text_color, :size => font_size
         end
-        pdf.stroke_color 'ff0000'
-        pdf.crop_marks([text_x+dx,text_y+dy],width,font_size)
+        if (options[:marks])
+          pdf.stroke_color 'ff0000'
+          pdf.crop_marks([text_x+dx,text_y+dy],width,font_size)
+        end
       end
 
       protected

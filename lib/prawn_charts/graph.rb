@@ -73,12 +73,12 @@ module PrawnCharts
 
     # Delegating these getters to the internal state object.
     def_delegators  :internal_state, :title,:x_legend,:y_legend, :theme, :default_type,
-      :point_markers,:point_markers_rotation,:point_markers_ticks, :value_formatter, :rasterizer,
-      :key_formatter
+      :point_markers,:point_markers_rotation,:point_markers_ticks, :value_formatter,
+      :key_formatter, :marks
 
     def_delegators  :internal_state, :title=, :theme=,:x_legend=,:y_legend=, :default_type=,
-      :point_markers=,:point_markers_rotation=,:point_markers_ticks=, :value_formatter=, :rasterizer=,
-      :key_formatter=
+      :point_markers=,:point_markers_rotation=,:point_markers_ticks=, :value_formatter=,
+      :key_formatter=, :marks=
 
     attr_reader :renderer     # Writer defined below
 
@@ -99,8 +99,7 @@ module PrawnCharts
     # value_formatter::   Sets a formatter used to modify marker values prior to rendering
     # point_markers::  Sets the x-axis marker values
     # point_markers_rotation::  Sets the angle of rotation for x-axis marker values
-    # point_markers_ticks::  Sets a small tick mark above each marker value.  Helful when used with rotation.
-    # rasterizer::  Sets the rasterizer to use when rendering to an image format.  Defaults to RMagick.
+    # point_markers_ticks::  Sets a small tick mark above each marker value.  Helpful when used with rotation.
     def initialize(*args)
       self.default_type   = args.shift if args.first.is_a?(Symbol)
       options             = args.shift.dup if args.first.is_a?(Hash)
@@ -113,7 +112,7 @@ module PrawnCharts
       self.value_formatter = PrawnCharts::Formatters::Number.new
       self.key_formatter = PrawnCharts::Formatters::Number.new
 
-      %w(title x_legend y_legend theme layers default_type value_formatter point_markers point_markers_rotation point_markers_ticks rasterizer renderer key_formatter marks).each do |arg|
+      %w(title x_legend y_legend theme layers default_type value_formatter point_markers point_markers_rotation point_markers_ticks renderer key_formatter marks).each do |arg|
         self.send("#{arg}=".to_sym, options.delete(arg.to_sym)) unless options[arg.to_sym].nil?
       end
 

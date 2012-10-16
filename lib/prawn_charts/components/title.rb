@@ -5,6 +5,8 @@ module PrawnCharts
   module Components
 
     class Title < Component
+      TITLE_FONT_SIZE = 80
+
       def draw(pdf, bounds, options={})
         if (options[:marks])
           pdf.stroke_color 'ff0000'
@@ -14,9 +16,15 @@ module PrawnCharts
         end
         theme = options[:theme] || PrawnCharts::Themes::Theme.default
         font_family = theme.font_family || "Helvetica"
-        font_size = theme.title_font_size || pdf.font_size
+        if (theme.title_font_size)
+          font_size = relative(theme.title_font_size)
+        else
+          font_size = relative(TITLE_FONT_SIZE)
+        end
         text_color =  theme.title || '000000'
-        #pdf.log_text("title #{options[:title]}, x #{bounds[:x]}, y #{bounds[:y]}, w #{ bounds[:width]}, font_family #{font_family}, font_size #{font_size}, text_color #{text_color}")
+        if (options[:marks])
+          #pdf.log_text("title #{options[:title]}, x #{bounds[:x]}, y #{bounds[:y]}, w #{ bounds[:width]}, font_family #{font_family}, font_size #{font_size}, text_color #{text_color}")
+        end
         if options[:title]
           pdf.font(font_family) do
             pdf.fill_color text_color

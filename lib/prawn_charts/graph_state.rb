@@ -15,8 +15,8 @@ module PrawnCharts
     attr_accessor :point_markers_ticks
     attr_accessor :value_formatter
     attr_accessor :key_formatter
-    attr_accessor :rasterizer
-    
+    attr_accessor :marks
+
     def initialize
     end
   end # GraphState
