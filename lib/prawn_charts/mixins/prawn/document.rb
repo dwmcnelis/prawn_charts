@@ -23,6 +23,24 @@ module Prawn
 
     #--------------------------------------------------------------------------------------------------#
 
+    def push_mark_style(color='ff0000',font='Helvetica',size=8)
+      @marks_fill_color = fill_color
+      @marks_stroke_color = fill_color
+      @marks_font_family = font
+      @marks_font_size = size
+      fill_color color
+      stroke_color color
+    end
+
+    #--------------------------------------------------------------------------------------------------#
+
+    def pop_mark_style
+      fill_color @marks_fill_color
+      stroke_color @marks_stroke_color
+    end
+
+#--------------------------------------------------------------------------------------------------#
+
     def text_marks_y
       @text_marks_y = bounds.top unless @text_marks_y
       @text_marks_y
@@ -43,17 +61,16 @@ module Prawn
 
     #--------------------------------------------------------------------------------------------------#
 
-    def text_mark(text, level=:debug, options={})
+    def text_mark(text, options={})
       return unless marks?
-      fill_color (level == :fatal ? 'ff0000' : (level == :error ? '990033' : (level == :warn ? 'ffff00' : (level == :debug ? 'cc0066' : '6699cc'))))
-      prefix = (level == :fatal ? 'FATAL' : (level == :error ? 'ERROR' : (level == :warn ? 'WARN' : (level == :debug ? 'DEBUG' : 'INFO'))))
-      font_family = "Helvetica"
-      font_size = 8
+      push_mark_style
+      font_family = @marks_font_family
+      font_size = @marks_font_size
       font(font_family) do
-        text_box "#{prefix}: #{text}", :at => [0, text_marks_y], :size => font_size
+        text_box "|#{text}|", :at => [0, text_marks_y], :size => font_size
       end
-      fill_color '000000'
       text_marks_y_down(font_size)
+      pop_mark_style
     end
 
     #--------------------------------------------------------------------------------------------------#
@@ -66,6 +83,7 @@ module Prawn
                  :width => bounds.width.to_i
       }.merge(options)
 
+      push_mark_style
       dash(1, :space => 5)
       stroke_horizontal_line(-21, options[:width], :at => 0)
       stroke_vertical_line(-21, options[:height], :at => 0)
@@ -82,6 +100,7 @@ module Prawn
         fill_circle [0, point], 1
         draw_text point, :at => [-17, point-2], :size => 7
       end
+      pop_mark_style
     end
 
     #--------------------------------------------------------------------------------------------------#
@@ -94,6 +113,7 @@ module Prawn
                  :width => bounds.width.to_i
       }.merge(options)
 
+      push_mark_style
       dash(1, :space => 5)
       dx = options[:spacing][0]
       dy = options[:spacing][1]
@@ -107,6 +127,7 @@ module Prawn
         stroke_horizontal_line(dx, width-dx, :at => y)
       end
       undash
+      pop_mark_style
     end
 
     #--------------------------------------------------------------------------------------------------#
@@ -115,6 +136,7 @@ module Prawn
     #
     def crop_marks(at, width, height)
       return unless marks?
+      push_mark_style
       length = 10
       # upper left
       stroke_horizontal_line(at[0]-length, at[0], :at => at[1])
@@ -132,6 +154,7 @@ module Prawn
       dash(1, :space => 5)
       stroke_rectangle(at, width, height)
       undash
+      pop_mark_style
     end
 
     #--------------------------------------------------------------------------------------------------#
@@ -142,6 +165,7 @@ module Prawn
     #
     def centroid_mark(center, options)
       return unless marks?
+      push_mark_style
       radius = options[:radius] || 12
       pie_slice(center,
                 :radius => radius,
@@ -161,6 +185,7 @@ module Prawn
                               :radius => radius,
                               :start_angle => Math::THREE_HALVES_PI,
                               :end_angle => 0))
+      pop_mark_style
     end
 
   end
