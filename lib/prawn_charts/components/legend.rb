@@ -8,12 +8,10 @@ module PrawnCharts
       FONT_SIZE = 80
 
       def draw(pdf, bounds, options={})
-        if (options[:marks])
-          pdf.stroke_color 'ff0000'
-          pdf.fill_color 'ff0000'
-          pdf.fill_and_stroke_centroid([pdf.bounds.left+bounds[:x],pdf.bounds.bottom+bounds[:y]],:radius => 3)
-          pdf.crop_marks([pdf.bounds.left+bounds[:x],pdf.bounds.bottom+bounds[:y]+bounds[:height]],bounds[:width],bounds[:height])
-        end
+        pdf.stroke_color 'ff0000'
+        pdf.fill_color 'ff0000'
+        pdf.fill_and_stroke_centroid_mark([pdf.bounds.left+bounds[:x],pdf.bounds.bottom+bounds[:y]],:radius => 3)
+        pdf.crop_marks([pdf.bounds.left+bounds[:x],pdf.bounds.bottom+bounds[:y]+bounds[:height]],bounds[:width],bounds[:height])
         vertical = options[:vertical_legend]
         legend_info = relevant_legend_info(options[:layers])
         @line_height, x, y, size = 0
@@ -57,13 +55,11 @@ module PrawnCharts
           font_family = theme.font_family || "Helvetica"
           font_size = text_height
           text_color =  theme.marker || 'fffffff'
-          if (options[:marks])
-            pdf.stroke_color 'ff0000'
-            pdf.fill_color 'ff0000'
-            pdf.fill_and_stroke_centroid([pdf.bounds.left+bounds[:x]+x+2*size,pdf.bounds.bottom+bounds[:y]+y+size],:radius => 3)
-            pdf.crop_marks([pdf.bounds.left+bounds[:x]+x+2*size,pdf.bounds.bottom+bounds[:y]+y+size],bounds[:width]-2*size,font_size)
-            #pdf.log_text("Legend #{options[:title]}, x #{bounds[:width]/2.0}, y #{bounds[:height]}, w #{ bounds[:width]}, font_family #{font_family}, font_size #{font_size}, text_color #{text_color}")
-          end
+          pdf.stroke_color 'ff0000'
+          pdf.fill_color 'ff0000'
+          pdf.fill_and_stroke_centroid_mark([pdf.bounds.left+bounds[:x]+x+2*size,pdf.bounds.bottom+bounds[:y]+y+size],:radius => 3)
+          pdf.crop_marks([pdf.bounds.left+bounds[:x]+x+2*size,pdf.bounds.bottom+bounds[:y]+y+size],bounds[:width]-2*size,font_size)
+          #pdf.text_mark("Legend #{options[:title]}, x #{bounds[:width]/2.0}, y #{bounds[:height]}, w #{ bounds[:width]}, font_family #{font_family}, font_size #{font_size}, text_color #{text_color}")
           pdf.font(font_family) do
             pdf.fill_color text_color
             #pdf.text_box legend_info[idx][:title], :at => [x + @line_height,y + text_height * 0.75], :width =>  bounds[:width], :align => :left, :color => text_color, :size => font_size

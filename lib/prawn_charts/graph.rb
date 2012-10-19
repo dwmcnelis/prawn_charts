@@ -74,11 +74,11 @@ module PrawnCharts
     # Delegating these getters to the internal state object.
     def_delegators  :internal_state, :title,:x_legend,:y_legend, :theme, :default_type,
       :point_markers,:point_markers_rotation,:point_markers_ticks, :value_formatter,
-      :key_formatter, :marks
+      :key_formatter
 
     def_delegators  :internal_state, :title=, :theme=,:x_legend=,:y_legend=, :default_type=,
       :point_markers=,:point_markers_rotation=,:point_markers_ticks=, :value_formatter=,
-      :key_formatter=, :marks=
+      :key_formatter=
 
     attr_reader :renderer     # Writer defined below
 
@@ -145,7 +145,6 @@ module PrawnCharts
       options[:min_key]             ||= bottom_key
       options[:max_key]             ||= top_key
       options[:graph]               ||= self
-      options[:marks]             ||= marks
 
       # Removed for now.
       # Added for making smaller fonts more legible, but may not be needed after all.
@@ -159,7 +158,7 @@ module PrawnCharts
       @width = (options[:size] ? options[:size][0] : 600)
       @height = (options[:size] ? options[:size][1] : 360)
       pdf.bounding_box([@at[0],@at[1]], :width => @width, :height => @height) do
-        pdf.log_reset
+        pdf.reset_text_marks
         if !options[:renderer].nil?
           options[:renderer].render(pdf,options)
         else

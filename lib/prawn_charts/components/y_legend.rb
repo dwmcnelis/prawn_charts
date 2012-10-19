@@ -10,7 +10,7 @@ module PrawnCharts
         font_family = theme.font_family || "Helvetica"
         font_size = theme.legend_font_size || relative(100) #pdf.font_size
         text_color =  theme.marker || '000000'
-        pdf.log_text("YLegend #{options[:title]}, x #{bounds[:width]/2.0}, y #{bounds[:height]}, w #{ bounds[:width]}, font_family #{font_family}, font_size #{font_size}, text_color #{text_color}")
+        pdf.text_mark("YLegend #{options[:title]}, x #{bounds[:width]/2.0}, y #{bounds[:height]}, w #{ bounds[:width]}, font_family #{font_family}, font_size #{font_size}, text_color #{text_color}")
         if options[:y_legend]
         end
 
