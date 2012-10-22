@@ -5,20 +5,38 @@ module Prawn
   class Document
     include PrawnCharts::Shapes
 
-    def marks?
-      @marks || nil
+    def marks_enabled?
+      @marks_enabled || nil
+    end
+
+    #--------------------------------------------------------------------------------------------------#
+
+    def enable_marks
+      @marks_enabled = true
+    end
+
+    #--------------------------------------------------------------------------------------------------#
+
+    def disable_marks
+      @marks_enabled = false
+    end
+
+    #--------------------------------------------------------------------------------------------------#
+
+    def marks_shown?
+      @marks_shown || nil
     end
 
     #--------------------------------------------------------------------------------------------------#
 
     def show_marks
-      @marks = true
+      @marks_shown = true
     end
 
     #--------------------------------------------------------------------------------------------------#
 
     def hide_marks
-      @marks = false
+      @marks_shown = false
     end
 
     #--------------------------------------------------------------------------------------------------#
@@ -62,7 +80,7 @@ module Prawn
     #--------------------------------------------------------------------------------------------------#
 
     def text_mark(text, options={})
-      return unless marks?
+      return unless marks_enabled? && marks_shown?
       push_mark_style
       font_family = @marks_font_family
       font_size = @marks_font_size
@@ -78,7 +96,7 @@ module Prawn
     # Draws X and Y axis rulers beginning at the bounding box origin.
     #
     def axis_marks(options={})
-      return unless marks?
+      return unless marks_enabled? && marks_shown?
       options = {:height => (cursor - 20).to_i,
                  :width => bounds.width.to_i
       }.merge(options)
@@ -108,7 +126,7 @@ module Prawn
     # Draws grid beginning at the margin box origin.
     #
     def grid_marks(options={})
-      return unless marks?
+      return unless marks_enabled? && marks_shown?
       options = {:spacing => [12, 12], :height => (cursor - 20).to_i,
                  :width => bounds.width.to_i
       }.merge(options)
@@ -135,7 +153,7 @@ module Prawn
     # Draws crop marks at each corner of a bounding box
     #
     def crop_marks(at, width, height)
-      return unless marks?
+      return unless marks_enabled? && marks_shown?
       push_mark_style
       length = 10
       # upper left
@@ -164,7 +182,7 @@ module Prawn
     # options must include :radius
     #
     def centroid_mark(center, options)
-      return unless marks?
+      return unless marks_enabled? && marks_shown?
       push_mark_style
       radius = options[:radius] || 12
       pie_slice(center,
