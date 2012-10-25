@@ -82,8 +82,7 @@ module PrawnCharts
 
         pdf.stroke_color 'ff0000'
         pdf.fill_color 'ff0000'
-        pdf.fill_and_stroke_centroid_mark(center,:radius => 3)
-        pdf.fill_and_stroke_centroid_mark([text_x,text_y],:radius => 3)
+        pdf.centroid_mark(center,:radius => 3)
 
         # If percentage is really really close to 100% then draw a circle instead!
         if percent >= 99.9999
@@ -105,15 +104,15 @@ module PrawnCharts
           #end
 
           pdf.stroke_color theme.outlines[0]
+          pdf.stroke { pdf.pie_slice(center,
+            :radius => radius,
+            :start_angle => start_angle,
+            :end_angle => end_angle,:stroke_both_sides => true) }
           pdf.fill_color color
-          pdf.fill_pie_slice(center,
+          pdf.fill { pdf.pie_slice(center,
             :radius => radius,
             :start_angle => start_angle,
-            :end_angle => end_angle)
-          pdf.stroke_pie_slice(center,
-            :radius => radius,
-            :start_angle => start_angle,
-            :end_angle => end_angle,:stroke_both_sides => true)
+            :end_angle => end_angle) }
 
           #pdf.path(:d =>  "M#{@center_x},#{@center_y} L#{x_start},#{y_start} A#{radius},#{radius} 0, #{percent >= 50 ? '1' : '0'}, 1, #{x_end} #{y_end} Z",
           #  :stroke => stroke, :fill => color.to_s)
