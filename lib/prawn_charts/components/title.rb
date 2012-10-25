@@ -10,7 +10,7 @@ module PrawnCharts
       def draw(pdf, bounds, options={})
         pdf.stroke_color 'ff0000'
         pdf.fill_color 'ff0000'
-        pdf.fill_and_stroke_centroid_mark([pdf.bounds.left+bounds[:x],pdf.bounds.bottom+bounds[:y]],:radius => 3)
+        pdf.centroid_mark([pdf.bounds.left+bounds[:x],pdf.bounds.bottom+bounds[:y]],:radius => 3)
         pdf.crop_marks([pdf.bounds.left+bounds[:x],pdf.bounds.bottom+bounds[:y]+bounds[:height]],bounds[:width],bounds[:height])
         theme = options[:theme] || PrawnCharts::Themes::Theme.default
         font_family = theme.font_family || "Helvetica"

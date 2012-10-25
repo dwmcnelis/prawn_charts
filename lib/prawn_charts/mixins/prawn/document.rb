@@ -185,24 +185,34 @@ module Prawn
       return unless marks_enabled? && marks_shown?
       push_mark_style
       radius = options[:radius] || 12
-      pie_slice(center,
+      stroke { pie_slice(center,
                 :radius => radius,
                 :start_angle => 0,
                 :end_angle => Math::HALF_PI,
-                :stroke_both_sides => true)
-      open_curve(arc_vertices(center,
+                :stroke_both_sides => true) }
+      fill { pie_slice(center,
+        :radius => radius,
+        :start_angle => 0,
+        :end_angle => Math::HALF_PI,
+        :stroke_both_sides => true) }
+      stroke { open_curve(arc_vertices(center,
                               :radius => radius,
                               :start_angle => Math::HALF_PI,
-                              :end_angle => Math::PI))
-      pie_slice(center,
-                :radius => radius,
-                :start_angle => Math::PI,
-                :end_angle => Math::THREE_HALVES_PI,
-                :stroke_both_sides => true)
-      open_curve(arc_vertices(center,
+                              :end_angle => Math::PI)) }
+      stroke { pie_slice(center,
+        :radius => radius,
+        :start_angle => Math::PI,
+        :end_angle => Math::THREE_HALVES_PI,
+        :stroke_both_sides => true) }
+      fill { pie_slice(center,
+        :radius => radius,
+        :start_angle => Math::PI,
+        :end_angle => Math::THREE_HALVES_PI,
+        :stroke_both_sides => true) }
+      stroke { open_curve(arc_vertices(center,
                               :radius => radius,
                               :start_angle => Math::THREE_HALVES_PI,
-                              :end_angle => 0))
+                              :end_angle => 0)) }
       pop_mark_style
     end
 
