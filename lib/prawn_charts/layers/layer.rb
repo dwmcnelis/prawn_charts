@@ -21,7 +21,7 @@ module PrawnCharts
       # The following attributes are user-definable at any time.
       # title, points, relevant_data, preferred_color, options
       attr_accessor :title
-      attr_accessor :subtitles
+      attr_accessor :titles
       attr_accessor :points
       attr_accessor :relevant_data
       attr_accessor :preferred_color
@@ -34,7 +34,7 @@ module PrawnCharts
       attr_reader :height, :width
       attr_reader :min_value, :max_value
       attr_reader :color
-      attr_reader :subcolors
+      attr_reader :colors
       attr_reader :outline
       attr_reader :opacity
       attr_reader :complexity
@@ -58,14 +58,25 @@ module PrawnCharts
       # shadow:: Display line shadow? true or false (default)
       # dots:: Display co-ord dots? true or false (default)
       def initialize(options = {})
-        @title              = options.delete(:title) || ''
-        @subtitles          = options.delete(:subtitles) || ['']
-        @preferred_color    = options.delete(:color)
-        @preferred_outline    = options.delete(:outline)
-        @relevant_data      = options.delete(:relevant_data) || true
-        @points             = options.delete(:points) || []
+        @points = []
+        @titles = []
+        points = options.delete(:points)
+        case points
+        when Hash
+          points.each do |k, v|
+            @points << v
+            @titles << k.to_s
+          end
+        when Array
+          @points = points
+        end
+        @title = options.delete(:title) || ''
+        titles = options.delete(:titles)
+        @titles = titles if titles
+        @preferred_color = options.delete(:color)
+        @preferred_outline = options.delete(:outline)
+        @relevant_data = options.delete(:relevant_data) || true
         @points.extend PrawnCharts::Helpers::PointContainer unless @points.kind_of? PrawnCharts::Helpers::PointContainer
-
         options[:stroke_width] ||= 1
         options[:dots] ||= false
         options[:shadow] ||= false

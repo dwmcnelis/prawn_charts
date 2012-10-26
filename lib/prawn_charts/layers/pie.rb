@@ -57,14 +57,15 @@ module PrawnCharts
           block.call(self)
         else
           # Otherwise, just iterate over the points, adding the slices
-          if @points.class == Hash
-            @points.keys.each {|k|
-              self.add :pie_slice, k.to_s, [@points[k]]}
-          end
-          if @points.class == Array
-            @points.each {|v|
-              self.add :pie_slice, '', [v]}
-          end
+          #if @points.class == Hash
+          #  @points.keys.each {|k|
+          #    self.add :pie_slice, k.to_s, [@points[k]]}
+          #end
+          #if @points.class == Array
+            @points.each_with_index do |value,index|
+              self.add :pie_slice, @titles.fetch(index,''), [value]
+            end
+          #end
         end
       end
 

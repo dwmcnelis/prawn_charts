@@ -10,12 +10,13 @@ module PrawnCharts
       # Draw bar graph.
       # Now handles positive and negative values gracefully.
       def draw(pdf, coords, options = {})
+        #puts "bar draw options #{options.awesome_inspect}"
         theme = options[:theme] || PrawnCharts::Themes::Theme.default
-        @subcolors = []
+        @colors = []
         coords.each_with_index do |coord,idx|
           next if coord.nil?
           color = preferred_color || color || options[:theme].next_color
-          @subcolors << color
+          @colors << color
 
           x, y, bar_height = (coord.first), coord.last, 1#(height - coord.last)
 
@@ -33,28 +34,31 @@ module PrawnCharts
           pdf.centroid_mark([x+@bar_width/2.0,height-y-bar_height/2.0],:radius => 3)
           pdf.crop_marks([x,height-y],@bar_width,bar_height)
 
-          unless options[:border] == false
-            pdf.stroke_color theme.outlines[0]
-            pdf.stroke_rectangle([x,height-y], @bar_width, bar_height)
-          end
-
           current_color = color.is_a?(Array) ? color[idx % color.size] : color
 
           pdf.fill_color current_color
           #alpha = 1.0
           #pdf.transparent(alpha) do
-            pdf.fill_rectangle([x,height-y], @bar_width, bar_height)
+          pdf.fill_rectangle([x,height-y], @bar_width, bar_height)
           #end
+
+          unless options[:border] == false
+            pdf.stroke_color theme.outlines[0]
+            pdf.stroke_rectangle([x,height-y], @bar_width, bar_height)
+          end
+
         end
       end
 
       def legend_data
         if relevant_data? && @color
           retval = []
-          subtitles.each_with_index do |stitle,index|
-            retval << {:title => stitle,
-                       :color => @subcolors[index],
-                       :priority => :normal}
+          if titles && !titles.empty?
+            titles.each_with_index do |stitle, index|
+              retval << {:title => stitle,
+                :color => @colors[index],
+                :priority => :normal}
+            end
           end
           retval
         else
@@ -76,8 +80,11 @@ module PrawnCharts
       # up with the center of bar charts.
 
       def generate_coordinates(options = {})
-        @bar_width = (width / points.size) * 0.95
-        options[:point_distance] = (width - (width / points.size)) / (points.size - 1).to_f
+        #puts "bar generate_coordinates options #{options.awesome_inspect}"
+        #puts "bar generate_coordinates @options #{@options.awesome_inspect}"
+        dx = @options[:explode] ? relative(@options[:explode]) : 0
+        @bar_width = (width / points.size)-dx
+        options[:point_distance] = (width - @bar_width ) / (points.size - 1).to_f
 
         #TODO more array work with index, try to rework to be accepting of hashes
         coords = (0...points.size).map do |idx|
