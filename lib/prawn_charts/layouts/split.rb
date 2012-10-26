@@ -1,10 +1,10 @@
 
-require 'prawn_charts/renderers/empty'
+require 'prawn_charts/layouts/empty'
 
 module PrawnCharts
-  module Renderers
+  module Layouts
 
-    # Renderer that splits the graphs up into four other little graphs.
+    # Layout that splits the graphs up into four other little graphs.
     class Split < Empty
       def define_layout
         super do |components|
@@ -49,5 +49,5 @@ module PrawnCharts
       end
     end # Split
 
-  end # Renderers
+  end # Layouts
 end # PrawnCharts

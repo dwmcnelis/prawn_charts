@@ -21,6 +21,7 @@ module PrawnCharts
       # The following attributes are user-definable at any time.
       # title, points, relevant_data, preferred_color, options
       attr_accessor :title
+      attr_accessor :subtitles
       attr_accessor :points
       attr_accessor :relevant_data
       attr_accessor :preferred_color
@@ -33,6 +34,7 @@ module PrawnCharts
       attr_reader :height, :width
       attr_reader :min_value, :max_value
       attr_reader :color
+      attr_reader :subcolors
       attr_reader :outline
       attr_reader :opacity
       attr_reader :complexity
@@ -57,6 +59,7 @@ module PrawnCharts
       # dots:: Display co-ord dots? true or false (default)
       def initialize(options = {})
         @title              = options.delete(:title) || ''
+        @subtitles          = options.delete(:subtitles) || ['']
         @preferred_color    = options.delete(:color)
         @preferred_outline    = options.delete(:outline)
         @relevant_data      = options.delete(:relevant_data) || true

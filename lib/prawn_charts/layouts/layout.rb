@@ -1,12 +1,12 @@
 
 module PrawnCharts
-  module Renderers
+  module Layouts
 
-    # Provides all the base functionality needed to render a graph, but
+    # Provides all the base functionality needed to layout a graph, but
     # does not provide a default layout.
     #
-    # For a basic layout, see PrawnCharts::Renderers::Standard.
-    class Renderer
+    # For a basic layout, see PrawnCharts::Layouts::Standard.
+    class Layout
       include PrawnCharts::Helpers::Canvas
 
       attr_accessor :pdf
@@ -27,23 +27,11 @@ module PrawnCharts
         rendertime_renderer = self.clone
         rendertime_renderer.instance_eval { before_render if respond_to?(:before_render) }
 
-        #svg = Builder::XmlMarkup.new(:indent => 2)
-        #unless options[:no_doctype_header]
-        #  svg.instruct!
-        #  svg.declare! :DOCTYPE, :svg, :PUBLIC, "-//W3C//DTD SVG 1.0//EN", "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd"
-        #end
-        #svg.svg(:xmlns => "http://www.w3.org/2000/svg", 'xmlns:xlink' => "http://www.w3.org/1999/xlink", :width => options[:size].first, :height => options[:size].last) {
-        #  svg.g(:id => options[:graph_id]) {
         rendertime_renderer.components.each do |component|
-          #bounds = bounds_for( options[:size], component.position, component.size)
-          #pdf.text_mark ":#{component.id} canvas #{options[:size][0]}x#{options[:size][1]} position #{component.position[0]},#{component.position[1]} size #{component.size[0]},#{component.size[1]} bounds #{bounds}"
           component.render(pdf,
             bounds_for( options[:size], component.position, component.size ),
             options)
         end
-        #}
-        #}
-        #svg.target!
       end
 
       def before_render
@@ -91,7 +79,7 @@ module PrawnCharts
           nil
         end
       end
-    end   # Renderer
+    end   # Layout
 
-  end # Renderers
+  end # Layouts
 end # PrawnCharts

@@ -25,6 +25,7 @@ module PrawnCharts
       attr_accessor :marker_font_size    # Marker Font Size:
       attr_accessor :title_font_size    # Title Font Size:
       attr_accessor :legend_font_size    # Legend Font Size:
+      attr_accessor :stacked_opacity    # Opacity for stacked graphs:
 
       # Returns a new PrawnCharts::Themes::Base object.
       #
@@ -32,9 +33,7 @@ module PrawnCharts
       # background:: background color.
       # colors:: an array of color values to use for graphs.
       # marker:: color used for grid lines, values, data points, etc.
-      # font_family:: in general, allows you to change the font used in the graph.
-      #               This is not yet supported in most graph elements,
-      #               and may be deprecated soon anyway.
+      # font_family:: font family used in the graph.
       def initialize(descriptor)
         self.background = descriptor[:background]
         self.colors     = descriptor[:colors]
@@ -46,6 +45,7 @@ module PrawnCharts
         self.marker_font_size = descriptor[:marker_font_size]
         self.title_font_size = descriptor[:title_font_size]
         self.legend_font_size = descriptor[:legend_font_size]
+        self.stacked_opacity = descriptor[:stacked_opacity]
       end
 
       # Returns the next available color in the color array.

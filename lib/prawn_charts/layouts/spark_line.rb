@@ -1,15 +1,15 @@
 
-require 'prawn_charts/renderers/renderer'
+require 'prawn_charts/layouts/layout'
 
 module PrawnCharts
-  module Renderers
+  module Layouts
 
     # Experimental, do not use.
-    class Sparkline < Renderer
+    class Sparkline < Layout
       def define_layout
         self.components << PrawnCharts::Components::Graphs.new(:sparkline, :position => [0, 0], :size => [100, 100])
       end
     end # SparkLine
 
-  end # Renderers
+  end # Layouts
 end # PrawnCharts

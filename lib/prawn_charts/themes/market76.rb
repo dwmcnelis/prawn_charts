@@ -13,7 +13,8 @@ module PrawnCharts
           :marker => palette[:slate_blue],
           :title => palette[:slate_blue],
           :outlines => [palette[:slate_blue], palette[:blue100]],
-          :colors => [palette[:slate_blue40], palette[:slate_blue], palette[:blue20], palette[:blue60], palette[:blue100], palette[:blue140], palette[:pale_blue], palette[:paleblue40], palette[:white]]
+          :colors => [palette[:slate_blue40], palette[:slate_blue], palette[:blue20], palette[:blue60], palette[:blue100], palette[:blue140], palette[:pale_blue], palette[:paleblue40], palette[:white]],
+          :stacked_opacity => 0.85
         })
       end
     end # Market76

@@ -80,8 +80,6 @@ module PrawnCharts
         text_x = @center_x + (Math.cos(mid_angle)*radius*MARKER_OFFSET_RATIO)
         text_y = @center_y + (Math.sin(mid_angle)*radius*MARKER_OFFSET_RATIO)
 
-        pdf.stroke_color 'ff0000'
-        pdf.fill_color 'ff0000'
         pdf.centroid_mark(center,:radius => 3)
 
         # If percentage is really really close to 100% then draw a circle instead!
@@ -138,7 +136,6 @@ module PrawnCharts
           pdf.fill_color text_color
           pdf.text_box "#{sprintf('%d', percent)}%", :at => [text_x+dx,text_y+dy], :width => width, :align => :center, :color => text_color, :size => font_size
         end
-        pdf.stroke_color 'ff0000'
         pdf.crop_marks([text_x+dx,text_y+dy],width,font_size)
       end
 

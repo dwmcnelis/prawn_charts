@@ -14,7 +14,6 @@ module PrawnCharts
 
         # Experimental, for later user.
         # This was supposed to add some fun filters, 3d effects and whatnot.
-        # Neither ImageMagick nor Mozilla pdf render this well (at all).  Maybe a future thing.
         #
         # pdf.defs {
         #   pdf.filter(:id => 'MyFilter', :filterUnits => 'userSpaceOnUse', :x => 0, :y => 0, :width => 200, :height => '120') {

@@ -1,12 +1,11 @@
 
-require 'prawn_charts/renderers/renderer'
+require 'prawn_charts/layouts/layout'
 
 module PrawnCharts
-  module Renderers
+  module Layouts
 
-    # Provides a more appropriate rendering for Pie Charts.
-    # Does not show grid or Data markers, but does add Pie Value Markers.
-    class Pie < Renderer
+    # Provides a more appropriate layout for Pie Charts.
+    class Pie < Layout
 
       def initialize
         self.components = []
@@ -17,5 +16,5 @@ module PrawnCharts
       end
     end # Pie
 
-  end # Renderers
+  end # Layouts
 end # PrawnCharts

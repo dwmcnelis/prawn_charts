@@ -10,34 +10,55 @@ module PrawnCharts
       # Draw bar graph.
       # Now handles positive and negative values gracefully.
       def draw(pdf, coords, options = {})
+        theme = options[:theme] || PrawnCharts::Themes::Theme.default
+        @subcolors = []
         coords.each_with_index do |coord,idx|
           next if coord.nil?
+          color = preferred_color || color || options[:theme].next_color
+          @subcolors << color
+
           x, y, bar_height = (coord.first), coord.last, 1#(height - coord.last)
 
           valh = max_value + min_value * -1 #value_height
           maxh = max_value * height / valh #positive area height
           minh = min_value * height / valh #negative area height
-                                                         #puts "height = #{height} and max_value = #{max_value} and min_value = #{min_value} and y = #{y} and point = #{points[idx]}"
+          #puts "height = #{height} and max_value = #{max_value} and min_value = #{min_value} and y = #{y} and point = #{points[idx]}"
           if points[idx] > 0
             bar_height = points[idx]*maxh/max_value
           else
             bar_height = points[idx]*minh/min_value
           end
 
-          #puts " y = #{y} and point = #{points[idx]}"
+          #pdf.text_mark "bar rect [#{x},#{y}], #{@bar_width}, #{bar_height}"
+          pdf.centroid_mark([x+@bar_width/2.0,height-y-bar_height/2.0],:radius => 3)
+          pdf.crop_marks([x,height-y],@bar_width,bar_height)
+
           unless options[:border] == false
-            pdf.g(:transform => "translate(-#{relative(0.5)}, -#{relative(0.5)})") {
-              pdf.rect( :x => x, :y => y, :width => @bar_width + relative(1), :height => bar_height + relative(1),
-                :style => "fill: black; fill-opacity: 0.15; stroke: none;" )
-              pdf.rect( :x => x+relative(0.5), :y => y+relative(2), :width => @bar_width + relative(1), :height => bar_height - relative(0.5),
-                :style => "fill: black; fill-opacity: 0.15; stroke: none;" )
-            }
+            pdf.stroke_color theme.outlines[0]
+            pdf.stroke_rectangle([x,height-y], @bar_width, bar_height)
           end
 
-          current_colour = color.is_a?(Array) ? color[idx % color.size] : color
+          current_color = color.is_a?(Array) ? color[idx % color.size] : color
 
-          pdf.rect( :x => x, :y => y, :width => @bar_width, :height => bar_height,
-            :fill => current_colour.to_s, 'style' => "opacity: #{opacity}; stroke: none;" )
+          pdf.fill_color current_color
+          #alpha = 1.0
+          #pdf.transparent(alpha) do
+            pdf.fill_rectangle([x,height-y], @bar_width, bar_height)
+          #end
+        end
+      end
+
+      def legend_data
+        if relevant_data? && @color
+          retval = []
+          subtitles.each_with_index do |stitle,index|
+            retval << {:title => stitle,
+                       :color => @subcolors[index],
+                       :priority => :normal}
+          end
+          retval
+        else
+          nil
         end
       end
 

@@ -8,7 +8,7 @@ require 'prawn_charts/version'
 require 'prawn_charts/formatters'
 require 'prawn_charts/layers'
 require 'prawn_charts/components'
-require 'prawn_charts/renderers'
+require 'prawn_charts/layouts'
 
 # PrawnCharts Graphing Library for Prawn
 # (adapted from Scruffy by Brasten Sager)

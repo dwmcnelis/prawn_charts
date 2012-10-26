@@ -1,15 +1,15 @@
 
-require 'prawn_charts/renderers/renderer'
+require 'prawn_charts/layouts/layout'
 
 module PrawnCharts
-  module Renderers
+  module Layouts
 
     # An Empty graph isn't completely empty, it adds a background component
     # to itself before handing other all other layout responsibilities to it's
     # subclasses or caller.
-    class Empty < Renderer
+    class Empty < Layout
 
-      # Returns a renderer with just a background.
+      # Returns a layout with just a background.
       #
       # If a block is provided, the components array is passed to
       # the block, allowing callers to add components during initialize.
@@ -20,5 +20,5 @@ module PrawnCharts
       end
     end # Empty
 
-  end # Renderers
+  end # Layouts
 end # PrawnCharts

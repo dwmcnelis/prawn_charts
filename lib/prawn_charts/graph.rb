@@ -33,22 +33,13 @@ module PrawnCharts
   #   graph << PrawnCharts::Layers::Line.new(:title => 'John', :points => [100, -20, 30, 60])
   #   graph << PrawnCharts::Layers::Line.new(:title => 'Sara', :points => [120, 50, -80, 20])
   #
-  # Now that we've created our graph and added a layer to it, we're ready to render!  You can render the graph
-  # directly to SVG or any other image format (supported by RMagick) with the Graph#render method:
+  # Now that we've created our graph and added a layer to it, we're ready to render!
   #
-  #   graph.render    # Renders a 600x400 SVG graph
+  #   graph.render    # Renders a 600x400 PDF graph
   #
   #   OR
   #
   #   graph.render(:width => 1200)
-  #
-  #   # For image formats other than SVG:
-  #   graph.render(:width => 1200, :as => 'PNG')
-  #
-  #   # To render directly to a file:
-  #   graph.render(:width => 5000, :to => '<filename>')
-  #
-  #   graph.render(:width => 700, :as => 'PNG', :to => '<filename>')
   #
   # And that's your basic PrawnCharts graph!  Please check the documentation for the various methods and
   # classes you'll be using, as there are a bunch of options not demonstrated here.
@@ -80,7 +71,7 @@ module PrawnCharts
       :point_markers=,:point_markers_rotation=,:point_markers_ticks=, :value_formatter=,
       :key_formatter=
 
-    attr_reader :renderer     # Writer defined below
+    attr_reader :layout     # Writer defined below
 
     # Returns a new Graph.  You can optionally pass in a default graph type and an options hash.
     #
@@ -108,11 +99,11 @@ module PrawnCharts
       options ||= {}
 
       self.theme = PrawnCharts::Themes::Default.new
-      self.renderer = PrawnCharts::Renderers::Default.new
+      self.layout = PrawnCharts::Layouts::Default.new
       self.value_formatter = PrawnCharts::Formatters::Number.new
       self.key_formatter = PrawnCharts::Formatters::Number.new
 
-      %w(title x_legend y_legend theme layers default_type value_formatter point_markers point_markers_rotation point_markers_ticks renderer key_formatter marks).each do |arg|
+      %w(title x_legend y_legend theme layers default_type value_formatter point_markers point_markers_rotation point_markers_ticks layout key_formatter marks).each do |arg|
         self.send("#{arg}=".to_sym, options.delete(arg.to_sym)) unless options[arg.to_sym].nil?
       end
 
@@ -127,7 +118,7 @@ module PrawnCharts
     # theme:: Theme used to render graph for this render only.
     # min_value:: Overrides the calculated minimum value used for the graph.
     # max_value:: Overrides the calculated maximum value used for the graph.
-    # renderer:: Provide a Renderer object to use instead of the default.
+    # layout:: Provide a Layout object to use instead of the default.
     def render(pdf,options = {})
       options[:theme]               ||= theme
       options[:value_formatter]     ||= value_formatter
@@ -146,40 +137,30 @@ module PrawnCharts
       options[:max_key]             ||= top_key
       options[:graph]               ||= self
 
-      # Removed for now.
-      # Added for making smaller fonts more legible, but may not be needed after all.
-      #
-      # if options[:as] && (options[:size][0] <= 300 || options[:size][1] <= 200)
-      #   options[:actual_size] = options[:size]
-      #   options[:size] = [800, (800.to_f * (options[:actual_size][1].to_f / options[:actual_size][0].to_f))]
-      # end
-
       @at = options[:at] || [0,0]
       @width = (options[:size] ? options[:size][0] : 600)
       @height = (options[:size] ? options[:size][1] : 360)
       pdf.bounding_box([@at[0],@at[1]], :width => @width, :height => @height) do
         pdf.reset_text_marks
-        if !options[:renderer].nil?
-          options[:renderer].render(pdf,options)
+        if !options[:layout].nil?
+          options[:layout].render(pdf,options)
         else
-          self.renderer.render(pdf,options)
+          self.layout.render(pdf,options)
         end
       end
     end
 
-    def renderer=(options)
-      raise ArgumentError, "Renderer must include a #render(options) method." unless (options.respond_to?(:render) && options.method(:render).arity.abs > 0)
-      @renderer = options
+    def layout=(options)
+      raise ArgumentError, "Layout must include a #render(options) method." unless (options.respond_to?(:render) && options.method(:render).arity.abs > 0)
+      @layout = options
     end
 
-    alias :layout :renderer
-
     def component(id)
-      renderer.component(id)
+      layout.component(id)
     end
 
     def remove(id)
-      renderer.remove(id)
+      layout.remove(id)
     end
 
     private

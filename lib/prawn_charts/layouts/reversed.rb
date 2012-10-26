@@ -1,10 +1,10 @@
 
-require 'prawn_charts/renderers/renderer'
+require 'prawn_charts/layouts/layout'
 
 module PrawnCharts
-  module Renderers
+  module Layouts
 
-    class Reversed < Renderer
+    class Reversed < Layout
       def define_layout
         self.components << PrawnCharts::Components::Background.new(:background, :position => [0,0], :size =>[100, 100])
         self.components << PrawnCharts::Components::Title.new(:title, :position => [98, 95], :size => [1, 3], :text_anchor => 'end')
@@ -16,5 +16,5 @@ module PrawnCharts
       end
     end # Reversed
 
-  end # Renderers
+  end # Layouts
 end # PrawnCharts
