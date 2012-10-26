@@ -86,7 +86,6 @@ module PrawnCharts
         @bar_width = (width / points.size)-dx
         options[:point_distance] = (width - @bar_width ) / (points.size - 1).to_f
 
-        #TODO more array work with index, try to rework to be accepting of hashes
         coords = (0...points.size).map do |idx|
           next if points[idx].nil?
           x_coord = (options[:point_distance] * idx) + (width / points.size * 0.5) - (@bar_width * 0.5)
