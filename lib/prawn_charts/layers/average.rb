@@ -7,10 +7,6 @@ module PrawnCharts
     # An 'average' graph.  This graph iterates through all the layers and averages
     # all the data at each point, then draws a thick, translucent, shadowy line graph
     # indicating the average values.
-    #
-    # This only looks decent in pdf mode.  ImageMagick doesn't retain the transparency
-    # for some reason, creating a massive black line.  Any help resolving this would
-    # be useful.
     class Average < Layer
       attr_reader :layers
 
@@ -26,8 +22,20 @@ module PrawnCharts
 
       # Render average graph.
       def draw(pdf, coords, options = {})
-        pdf.polyline( :points => coords.join(' '), :fill => 'none', :stroke => 'black',
-          'stroke-width' => relative(5), 'opacity' => '0.4')
+        #pdf.polyline( :points => coords.join(' '), :fill => 'none', :stroke => 'black',
+        #  'stroke-width' => relative(5), 'opacity' => '0.4')
+        px, py = (coords[0].first), coords[0].last
+        coords.each_with_index do |coord,index|
+          x, y = (coord.first), coord.last
+          unless index == 0
+            #pdf.text_mark "line stroke_line [#{px}, #{height-py}], [#{x}, #{height-y}]"
+            pdf.transparent(0.5) do
+              pdf.stroke_color = outline_color
+              pdf.stroke_line [px, height-py], [x, height-y]
+            end
+          end
+          px, py = x, y
+        end
       end
 
       protected

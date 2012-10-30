@@ -85,7 +85,7 @@ module Prawn
       font_family = @marks_font_family
       font_size = @marks_font_size
       font(font_family) do
-        text_box "|#{text}|", :at => [0, text_marks_y], :size => font_size
+        text_box "#{text}", :at => [0, text_marks_y], :size => font_size
       end
       text_marks_y_down(font_size)
       pop_mark_style

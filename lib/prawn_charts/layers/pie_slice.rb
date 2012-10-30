@@ -17,7 +17,6 @@ module PrawnCharts
 
       def draw(pdf, coords, options = {})
         #pdf.text_mark "pie_slice coords #{coords}, options #{options}"
-        theme = options[:theme] || PrawnCharts::Themes::Theme.default
         # Scaler is the multiplier to normalize the values to a percentage across
         # the Pie Chart
         @scaler = options[:scaler] || 1
@@ -90,7 +89,8 @@ module PrawnCharts
           #    :fill => shadow_color.to_s,  :style => "fill-opacity: #{shadow_opacity.to_s};")
           #end
 
-          pdf.stroke_color theme.outlines[0]
+          theme.reset_outline
+          pdf.stroke_color theme.next_outline
           pdf.fill_color color
           pdf.fill_and_stroke_circle center, radius
           #pdf.circle(:cx => "#{@center_x}", :cy => "#{@center_y}", :r=>"#{radius}",:stroke => stroke, :fill => color.to_s)
@@ -101,7 +101,8 @@ module PrawnCharts
           #    :fill => shadow_color.to_s, :style => "fill-opacity: #{shadow_opacity.to_s};")
           #end
 
-          pdf.stroke_color theme.outlines[0]
+          theme.reset_outline
+          pdf.stroke_color theme.next_outline
           pdf.stroke { pdf.pie_slice(center,
             :radius => radius,
             :start_angle => start_angle,
@@ -123,8 +124,8 @@ module PrawnCharts
         #  :x => text_x,
         #  :y => text_y + relative(MARKER_FONT_SIZE / 2),
         #  'font-size' => relative(MARKER_FONT_SIZE),
-        #  'font-family' => options[:theme].font_family,
-        #  :fill => (options[:theme].marker || 'black').to_s,
+        #  'font-family' => theme.font_family,
+        #  :fill => (theme.marker || 'black').to_s,
         #  'text-anchor' => 'middle')
         font_family = theme.font_family || "Helvetica"
         font_size = relative(MARKER_FONT_SIZE)

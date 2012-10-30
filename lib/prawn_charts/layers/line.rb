@@ -15,32 +15,77 @@ module PrawnCharts
 
         # Include options provided when the object was created
         options.merge!(@options)
-
-        stroke_width = (options[:relativestroke]) ? relative(options[:stroke_width]) : options[:stroke_width]
+        pdf.reset_text_marks
+        stroke_width = (options[:relative]) ? relative(options[:stroke_width]) : options[:stroke_width]
+        marker = options[:marker]
+        marker_size = options[:marker_size] || 2
+        marker_size = (options[:relative]) ? relative(marker_size) : marker_size
         style = (options[:style]) ? options[:style] : ''
+        theme.reset_outline
+        outline_color = theme.next_outline
+        save_line_width = pdf.line_width
+        pdf.line_width = stroke_width
+        #pdf.dash(length, :space => space, :phase => phase)
 
         if options[:shadow]
-          pdf.g(:class => 'shadow', :transform => "translate(#{relative(0.5)}, #{relative(0.5)})") {
-            pdf.polyline( :points => stringify_coords(coords).join(' '), :fill => 'transparent',
-              :stroke => 'black', 'stroke-width' => stroke_width,
-              :style => 'fill-opacity: 0; stroke-opacity: 0.35' )
-
-            if options[:dots]
-              coords.each { |coord| pdf.circle( :cx => coord.first, :cy => coord.last + relative(0.9), :r => stroke_width,
-                :style => "stroke-width: #{stroke_width}; stroke: black; opacity: 0.35;" ) }
+          offset = 2
+          px, py = (coords[0].first), coords[0].last
+          coords.each_with_index do |coord,index|
+            x, y = (coord.first), coord.last
+            unless index == 0
+              pdf.transparent(0.5) do
+                pdf.stroke_color = outline_color
+                pdf.stroke_line [px+offset, height-py-offset], [x+offset, height-y-offset]
+              end
             end
-          }
+            px, py = x, y
+          end
+          if marker
+            theme.reset_color
+            coords.each do |coord|
+              x, y = (coord.first)+offset, height-coord.last-offset
+              color = preferred_color || theme.next_color
+              draw_marker(pdf,marker,x,y,marker_size,color)
+            end
+          end
         end
 
-
-        pdf.polyline( :points => stringify_coords(coords).join(' '), :fill => 'none', :stroke => @color.to_s,
-          'stroke-width' => stroke_width, :style => style  )
-
-        if options[:dots]
-          coords.each { |coord| pdf.circle( :cx => coord.first, :cy => coord.last, :r => stroke_width,
-            :style => "stroke-width: #{stroke_width}; stroke: #{color.to_s}; fill: #{color.to_s}" ) }
+        px, py = (coords[0].first), coords[0].last
+        coords.each_with_index do |coord,index|
+          x, y = (coord.first), coord.last
+          unless index == 0
+            #pdf.text_mark "line stroke_line [#{px}, #{height-py}], [#{x}, #{height-y}]"
+            pdf.stroke_color = outline_color
+            pdf.stroke_line [px, height-py], [x, height-y]
+          end
+          px, py = x, y
+        end
+        if marker
+          theme.reset_color
+          coords.each do |coord|
+            x, y = (coord.first), height-coord.last
+            color = preferred_color || theme.next_color
+            draw_marker(pdf,marker,x,y,marker_size,color)
+          end
         end
 
+        pdf.line_width = save_line_width
+      end
+
+      def legend_data
+        if relevant_data? && @color
+          retval = []
+          if titles && !titles.empty?
+            titles.each_with_index do |stitle, index|
+              retval << {:title => stitle,
+                         :color => @colors[index],
+                         :priority => :normal}
+            end
+          end
+          retval
+        else
+          nil
+        end
       end
     end # Line
 

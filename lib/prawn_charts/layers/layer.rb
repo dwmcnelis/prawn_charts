@@ -20,8 +20,9 @@ module PrawnCharts
     class Layer
       # The following attributes are user-definable at any time.
       # title, points, relevant_data, preferred_color, options
+      attr_accessor :theme
       attr_accessor :title
-      attr_accessor :subtitles
+      attr_accessor :titles
       attr_accessor :points
       attr_accessor :relevant_data
       attr_accessor :preferred_color
@@ -34,7 +35,7 @@ module PrawnCharts
       attr_reader :height, :width
       attr_reader :min_value, :max_value
       attr_reader :color
-      attr_reader :subcolors
+      attr_reader :colors
       attr_reader :outline
       attr_reader :opacity
       attr_reader :complexity
@@ -56,23 +57,39 @@ module PrawnCharts
       # stroke_width:: numeric value for width of line (0.1 - 10, default: 1)
       # relativestroke:: stroke-width relative  to image size? true or false (default)
       # shadow:: Display line shadow? true or false (default)
-      # dots:: Display co-ord dots? true or false (default)
+      # marker:: Display co-ord marker :circle,:square,:triangle,:star,nil
+      # marker_size:: Size of co-ord marker
       def initialize(options = {})
-        @title              = options.delete(:title) || ''
-        @subtitles          = options.delete(:subtitles) || ['']
-        @preferred_color    = options.delete(:color)
-        @preferred_outline    = options.delete(:outline)
-        @relevant_data      = options.delete(:relevant_data) || true
-        @points             = options.delete(:points) || []
-        @points.extend PrawnCharts::Helpers::PointContainer unless @points.kind_of? PrawnCharts::Helpers::PointContainer
-
+        #puts "layer initialize options #{options.awesome_inspect}"
+        @theme = options[:theme] || PrawnCharts::Themes::Theme.default
+        @points = []
+        @titles = []
+        points = options.delete(:points)
+        case points
+        when Hash
+          points.each do |k, v|
+            @points << v
+            @titles << k.to_s
+          end
+        when Array
+          @points = points.dup
+        end
+        @title = options.delete(:title) || ''
+        titles = options.delete(:titles)
+        @titles = titles.dup if titles
+        @preferred_color = options.delete(:color)
+        @preferred_outline = options.delete(:outline)
+        @relevant_data = options.delete(:relevant_data) || true
+        @points.extend(PrawnCharts::Helpers::PointContainer) unless @points.kind_of?(PrawnCharts::Helpers::PointContainer)
         options[:stroke_width] ||= 1
-        options[:dots] ||= false
+        options[:marker] ||= nil
+        options[:marker_size] ||= 2
+        options[:border] ||= false
         options[:shadow] ||= false
         options[:style] ||= false
-        options[:relativestroke] ||= false
+        options[:relative] ||= false
 
-        @options            = options
+        @options = options
 
       end
 
@@ -82,6 +99,8 @@ module PrawnCharts
       #
       # pdf:: a Prawn PDF Document object.
       def render(pdf, options)
+        #puts "layer render options #{options.awesome_inspect}"
+        @theme = options[:theme] || PrawnCharts::Themes::Theme.default
         setup_variables(options)
         coords = generate_coordinates(options)
 
@@ -112,6 +131,16 @@ module PrawnCharts
             :priority => :normal}
         else
           nil
+        end
+      end
+
+      def legend_colors
+        #puts "layer legend_colors theme #{theme.awesome_inspect}"
+        @colors = []
+        theme.reset_color
+        points.each do
+          color = preferred_color || theme.next_color
+          @colors << color
         end
       end
 
@@ -205,6 +234,27 @@ module PrawnCharts
       # to make that a little easier.
       def stringify_coords(coords) # :nodoc:
         coords.map { |c| c.join(',') }
+      end
+
+      def draw_marker(pdf,type,x,y,size,color)
+        pdf.fill_color = color
+        case type
+          when :circle
+            pdf.fill_circle [x, y], size
+          when :square
+            width = 2.0*size
+            pdf.fill_rectangle [x-size, y+size], width, width
+          when :triangle
+            pdf.fill_polygon [x-size, y-size],[x+size, y-size],[x, y+size]
+          when :diamond
+            height = 2.0*size
+            pdf.fill_polygon [x-size, y],[x,y+height],[x+size, y],[x, y-height]
+          when :plus
+            half = size/4.0
+            pdf.fill_polygon [x-half, y+half],[x-half, y+size],[x+half, y+size],[x+half, y+half],[x+size, y+half],[x+size, y-half],[x+half, y-half],[x+half, y-size],[x-half, y-size],[x-half, y-half],[x-size, y-half],[x-size, y+half]
+          when :star
+            pdf.fill_star [x,y], :radius => size*1.25
+        end
       end
     end # Layer
 

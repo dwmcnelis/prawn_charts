@@ -12,7 +12,7 @@ module PrawnCharts
       # class methods
       class << self
         def default
-          new PrawnCharts::Themes::Default.new
+          PrawnCharts::Themes::Default.new
         end
       end # class methods
       attr_accessor :background     # Background color or array of two colors
@@ -48,22 +48,30 @@ module PrawnCharts
         self.stacked_opacity = descriptor[:stacked_opacity]
       end
 
+      # Resets colors to beginning
+      def reset_color
+        @previous_color = 0
+      end
+
       # Returns the next available color in the color array.
       def next_color
         @previous_color = 0 if @previous_color.nil?
         @previous_color += 1
-
+        return '000000' if self.colors.nil?
         self.colors[(@previous_color-1) % self.colors.size]
       end
 
+
+      # Resets outline color to beginning
+      def reset_outline
+        @previous_outline = 0
+      end
 
       # Returns the next available outline in the outline array.
       def next_outline
         @previous_outline = 0 if @previous_outline.nil?
         @previous_outline += 1
-        if self.outlines.nil?
-          return '000000'
-        end
+        return '000000' if self.outlines.nil?
         self.outlines[(@previous_outline-1) % self.outlines.size]
       end
 

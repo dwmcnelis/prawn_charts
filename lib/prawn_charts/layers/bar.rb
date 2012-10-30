@@ -10,12 +10,16 @@ module PrawnCharts
       # Draw bar graph.
       # Now handles positive and negative values gracefully.
       def draw(pdf, coords, options = {})
-        theme = options[:theme] || PrawnCharts::Themes::Theme.default
-        @subcolors = []
+        #puts "bar draw options #{options.awesome_inspect}"
+        options.merge!(@options)
+        marker = options[:marker] || :circle
+        marker_size = options[:marker_size] || 2
+        marker_size = (options[:relative]) ? relative(marker_size) : marker_size
+        pdf.reset_text_marks
+        theme.reset_color
         coords.each_with_index do |coord,idx|
           next if coord.nil?
-          color = preferred_color || color || options[:theme].next_color
-          @subcolors << color
+          color = preferred_color || theme.next_color
 
           x, y, bar_height = (coord.first), coord.last, 1#(height - coord.last)
 
@@ -33,28 +37,39 @@ module PrawnCharts
           pdf.centroid_mark([x+@bar_width/2.0,height-y-bar_height/2.0],:radius => 3)
           pdf.crop_marks([x,height-y],@bar_width,bar_height)
 
-          unless options[:border] == false
-            pdf.stroke_color theme.outlines[0]
-            pdf.stroke_rectangle([x,height-y], @bar_width, bar_height)
-          end
-
           current_color = color.is_a?(Array) ? color[idx % color.size] : color
 
           pdf.fill_color current_color
           #alpha = 1.0
           #pdf.transparent(alpha) do
-            pdf.fill_rectangle([x,height-y], @bar_width, bar_height)
+          pdf.fill_rectangle([x,height-y], @bar_width, bar_height)
           #end
+          if options[:border]
+            theme.reset_outline
+            pdf.stroke_color theme.next_outline
+            pdf.stroke_rectangle([x,height-y], @bar_width, bar_height)
+          end
+        end
+
+        if marker
+          theme.reset_color
+          coords.each do |coord|
+            x, y = (coord.first), height-coord.last
+            color = preferred_color || theme.next_color
+            draw_marker(pdf,marker,x+@bar_width/2.0,y,marker_size,color)
+          end
         end
       end
 
       def legend_data
         if relevant_data? && @color
           retval = []
-          subtitles.each_with_index do |stitle,index|
-            retval << {:title => stitle,
-                       :color => @subcolors[index],
-                       :priority => :normal}
+          if titles && !titles.empty?
+            titles.each_with_index do |stitle, index|
+              retval << {:title => stitle,
+                :color => @colors[index],
+                :priority => :normal}
+            end
           end
           retval
         else
@@ -76,10 +91,12 @@ module PrawnCharts
       # up with the center of bar charts.
 
       def generate_coordinates(options = {})
-        @bar_width = (width / points.size) * 0.95
-        options[:point_distance] = (width - (width / points.size)) / (points.size - 1).to_f
+        #puts "bar generate_coordinates options #{options.awesome_inspect}"
+        #puts "bar generate_coordinates @options #{@options.awesome_inspect}"
+        dx = @options[:explode] ? relative(@options[:explode]) : 0
+        @bar_width = (width / points.size)-dx
+        options[:point_distance] = (width - @bar_width ) / (points.size - 1).to_f
 
-        #TODO more array work with index, try to rework to be accepting of hashes
         coords = (0...points.size).map do |idx|
           next if points[idx].nil?
           x_coord = (options[:point_distance] * idx) + (width / points.size * 0.5) - (@bar_width * 0.5)

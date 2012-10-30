@@ -57,14 +57,15 @@ module PrawnCharts
           block.call(self)
         else
           # Otherwise, just iterate over the points, adding the slices
-          if @points.class == Hash
-            @points.keys.each {|k|
-              self.add :pie_slice, k.to_s, [@points[k]]}
-          end
-          if @points.class == Array
-            @points.each {|v|
-              self.add :pie_slice, '', [v]}
-          end
+          #if @points.class == Hash
+          #  @points.keys.each {|k|
+          #    self.add :pie_slice, k.to_s, [@points[k]]}
+          #end
+          #if @points.class == Array
+            @points.each_with_index do |value,index|
+              self.add :pie_slice, @titles.fetch(index,''), [value]
+            end
+          #end
         end
       end
 
@@ -72,6 +73,7 @@ module PrawnCharts
       # Overrides Base#render to fiddle with layers' points to achieve a stacked
       # effect.
       def render(pdf, options = {})
+        @theme = options[:theme] || PrawnCharts::Themes::Theme.default
         # #current_points = points.dup
 
         @scaler = 1
@@ -85,6 +87,7 @@ module PrawnCharts
 
         @percent_used = 0
 
+        theme.reset_color
         layers.each do |layer|
           layer_options = options.dup
           layer_options = layer_options.merge(@options)
@@ -92,7 +95,7 @@ module PrawnCharts
           layer_options[:scaler] = @scaler
           layer_options[:percent_used] = @percent_used
           @percent_used += @scaler * layer.sum_values
-          layer_options[:color] = layer.preferred_color || layer.color || options[:theme].next_color
+          layer_options[:color] = layer.preferred_color || layer.color || theme.next_color
 
           layer.render(pdf, layer_options)
         end
