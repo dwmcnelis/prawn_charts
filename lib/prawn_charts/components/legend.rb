@@ -68,6 +68,7 @@ module PrawnCharts
             (categories.include?(layer.options[:category]) ||
               (layer.options[:categories] && (categories & layer.options[:categories]).size > 0) )
 
+            layer.legend_colors
             data = layer.legend_data
             arr << data if data.is_a?(Hash)
             arr = arr + data if data.is_a?(Array)

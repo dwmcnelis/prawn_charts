@@ -11,12 +11,15 @@ module PrawnCharts
       # Now handles positive and negative values gracefully.
       def draw(pdf, coords, options = {})
         #puts "bar draw options #{options.awesome_inspect}"
-        theme = options[:theme] || PrawnCharts::Themes::Theme.default
-        @colors = []
+        options.merge!(@options)
+        marker = options[:marker] || :circle
+        marker_size = options[:marker_size] || 2
+        marker_size = (options[:relative]) ? relative(marker_size) : marker_size
+        pdf.reset_text_marks
+        theme.reset_color
         coords.each_with_index do |coord,idx|
           next if coord.nil?
-          color = preferred_color || color || options[:theme].next_color
-          @colors << color
+          color = preferred_color || theme.next_color
 
           x, y, bar_height = (coord.first), coord.last, 1#(height - coord.last)
 
@@ -41,12 +44,20 @@ module PrawnCharts
           #pdf.transparent(alpha) do
           pdf.fill_rectangle([x,height-y], @bar_width, bar_height)
           #end
-
-          unless options[:border] == false
-            pdf.stroke_color theme.outlines[0]
+          if options[:border]
+            theme.reset_outline
+            pdf.stroke_color theme.next_outline
             pdf.stroke_rectangle([x,height-y], @bar_width, bar_height)
           end
+        end
 
+        if marker
+          theme.reset_color
+          coords.each do |coord|
+            x, y = (coord.first), height-coord.last
+            color = preferred_color || theme.next_color
+            draw_marker(pdf,marker,x+@bar_width/2.0,y,marker_size,color)
+          end
         end
       end
 

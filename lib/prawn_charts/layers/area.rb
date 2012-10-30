@@ -9,37 +9,54 @@ module PrawnCharts
 
       # Render area graph.
       def draw(pdf, coords, options={})
-        # pdf.polygon wants a long string of coords.
-        points_value = "0,#{height} #{stringify_coords(coords).join(' ')} #{width},#{height}"
+        options.merge!(@options)
+        marker = options[:marker]
+        marker_size = options[:marker_size] || 2
+        marker_size = (options[:relative]) ? relative(marker_size) : marker_size
+        pdf.reset_text_marks
+        translated = [[coords.first.first,0]]
+        coords.each do |x, y|
+          translated << [x, height-y]
+        end
+        translated << [coords.last.first,0]
+        theme.reset_color
+        theme.next_color
+        theme.next_color
+        theme.next_color
+        pdf.fill_color preferred_color || theme.next_color
+        pdf.fill { pdf.polygon(*translated) }
 
-        # Experimental, for later user.
-        # This was supposed to add some fun filters, 3d effects and whatnot.
-        #
-        # pdf.defs {
-        #   pdf.filter(:id => 'MyFilter', :filterUnits => 'userSpaceOnUse', :x => 0, :y => 0, :width => 200, :height => '120') {
-        #     pdf.feGaussianBlur(:in => 'SourceAlpha', :stdDeviation => 4, :result => 'blur')
-        #     pdf.feOffset(:in => 'blur', :dx => 4, :dy => 4, :result => 'offsetBlur')
-        #     pdf.feSpecularLighting( :in => 'blur', :surfaceScale => 5, :specularConstant => '.75',
-        #                             :specularExponent => 20, 'lighting-color' => '#bbbbbb',
-        #                             :result => 'specOut') {
-        #       pdf.fePointLight(:x => '-5000', :y => '-10000', :z => '20000')
-        #     }
-        #
-        #     pdf.feComposite(:in => 'specOut', :in2 => 'SourceAlpha', :operator => 'in', :result => 'specOut')
-        #     pdf.feComposite(:in => 'sourceGraphic', :in2 => 'specOut', :operator => 'arithmetic',
-        #                     :k1 => 0, :k2 => 1, :k3 => 1, :k4 => 0, :result => 'litPaint')
-        #
-        #     pdf.feMerge {
-        #       pdf.feMergeNode(:in => 'offsetBlur')
-        #       pdf.feMergeNode(:in => 'litPaint')
-        #     }
-        #   }
-        # }
-        pdf.g(:transform => "translate(0, -#{relative(2)})") {
-          pdf.polygon(:points => points_value, :style => "fill: black; stroke: black; fill-opacity: 0.06; stroke-opacity: 0.06;")
-        }
+        if options[:border]
+          theme.reset_outline
+          pdf.stroke_color theme.next_outline
+          pdf.stroke { pdf.polygon(*translated) }
+        end
 
-        pdf.polygon(:points => points_value, :fill => color.to_s, :stroke => color.to_s, 'style' => "opacity: #{opacity}")
+        if marker
+          theme.reset_color
+          coords.each do |coord|
+            x, y = (coord.first), height-coord.last
+            color = preferred_color || theme.next_color
+            draw_marker(pdf,marker,x,y,marker_size,color)
+          end
+        end
+
+      end
+
+      def legend_data
+        if relevant_data? && @color
+          retval = []
+          if titles && !titles.empty?
+            titles.each_with_index do |stitle, index|
+              retval << {:title => stitle,
+                         :color => @colors[index],
+                         :priority => :normal}
+            end
+          end
+          retval
+        else
+          nil
+        end
       end
     end # Area
 

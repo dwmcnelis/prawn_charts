@@ -4,8 +4,8 @@ require 'prawn_charts/layouts/layout'
 module PrawnCharts
   module Layouts
 
-    # Provides a more appropriate layout for Bar Charts.
-    class Bar < Layout
+    # Provides a layout with background, title, graph and legend.
+    class Legend < Layout
       def define_layout
         self.components = []
         self.components << PrawnCharts::Components::Background.new(:background, :position => [0,0], :size =>[100, 100])
