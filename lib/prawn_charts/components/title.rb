@@ -10,7 +10,6 @@ module PrawnCharts
       def draw(pdf, bounds, options={})
         pdf.centroid_mark([pdf.bounds.left+bounds[:x],pdf.bounds.bottom+bounds[:y]],:radius => 3)
         pdf.crop_marks([pdf.bounds.left+bounds[:x],pdf.bounds.bottom+bounds[:y]+bounds[:height]],bounds[:width],bounds[:height])
-        theme = options[:theme] || PrawnCharts::Themes::Theme.default
         font_family = theme.font_family || "Helvetica"
         if (theme.title_font_size)
           font_size = relative(theme.title_font_size)

@@ -7,7 +7,6 @@ module PrawnCharts
     class Background < Component
       def draw(pdf, bounds, options={})
         pdf.axis_marks
-        theme = options[:theme] || PrawnCharts::Themes::Theme.default
         start_color = theme.background[0] || 'ffffff'
         stop_color = theme.background[1] || 'ffffff'
         width = bounds[:width] || 540

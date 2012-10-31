@@ -41,13 +41,12 @@ module PrawnCharts
           end
 
           # "#{x} #{y} #{@line_height} #{size}"
-          theme = options[:theme] || PrawnCharts::Themes::Theme.default
           color = legend_info[idx][:color]
           pdf.fill_color = color
           pdf.fill_rectangle [pdf.bounds.left+bounds[:x]+x,pdf.bounds.bottom+bounds[:y]+y+size], size, size
           font_family = theme.font_family || "Helvetica"
           font_size = text_height
-          text_color =  theme.marker || 'fffffff'
+          text_color =  theme.marker || 'ffffff'
           pdf.centroid_mark([pdf.bounds.left+bounds[:x]+x+2*size,pdf.bounds.bottom+bounds[:y]+y+size],:radius => 3)
           pdf.crop_marks([pdf.bounds.left+bounds[:x]+x+2*size,pdf.bounds.bottom+bounds[:y]+y+size],bounds[:width]-2*size,font_size)
           #pdf.text_mark("Legend #{options[:title]}, x #{bounds[:width]/2.0}, y #{bounds[:height]}, w #{ bounds[:width]}, font_family #{font_family}, font_size #{font_size}, text_color #{text_color}")

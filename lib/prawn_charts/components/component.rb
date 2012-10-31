@@ -7,6 +7,7 @@ module PrawnCharts
     # Common attributes for all components, and a standard render method
     # that calls draw after setting up the drawing transformations.
     class Component
+      attr_accessor :theme
       attr_reader :id
 
       # In terms of percentages:  [10, 10] == 10% by 10%
@@ -18,6 +19,7 @@ module PrawnCharts
       # Options:
       # stroke_width:: numeric value for width of line (0.1 - 10, default: 1)
       def initialize(id, options = {})
+        @theme = options[:theme] || PrawnCharts::Themes::Theme.default
         @id = id.to_sym
         @position = options[:position] || [0, 0]
         @size = options[:size] || [100, 100]
@@ -27,6 +29,7 @@ module PrawnCharts
       end
 
       def render(pdf, bounds, options={})
+        @theme = options[:theme] || PrawnCharts::Themes::Theme.default
         if @visible
           unless bounds.nil?
             @render_height = bounds[:height]
