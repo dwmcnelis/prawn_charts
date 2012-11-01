@@ -14,7 +14,7 @@ module PrawnCharts
         #pdf.crop_marks([pdf.bounds.left+bounds[:x],pdf.bounds.bottom+bounds[:y]+bounds[:height]],bounds[:width],bounds[:height])
         save_line_width = pdf.line_width
         stroke_width = (options[:relative]) ? relative(options[:stroke_width]) : options[:stroke_width]
-        color = theme.grid || theme.marker
+        color = theme.grid || theme.marker || '000000'
         unless options[:show_x] == false
           y = (options[:max_value] * bounds[:height])/(options[:max_value] - options[:min_value])
           #pdf.text_mark "y #{y}"

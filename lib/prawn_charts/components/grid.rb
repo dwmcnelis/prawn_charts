@@ -29,12 +29,12 @@ module PrawnCharts
         end
 
         #add a 0 line
-        y = (options[:max_value] * bounds[:height])/(options[:max_value] - options[:min_value])
+#        y = (options[:max_value] * bounds[:height])/(options[:max_value] - options[:min_value])
         #pdf.text_mark "y #{y}"
-        pdf.stroke_color = color
-        pdf.line_width = stroke_width
+#        pdf.stroke_color = color
+#        pdf.line_width = stroke_width
         #pdf.text_mark "line stroke_line [#{pdf.bounds.left+bounds[:x]}, #{pdf.bounds.bottom+bounds[:y]+y}], [#{pdf.bounds.left+bounds[:x]+bounds[:width]}, #{pdf.bounds.bottom+bounds[:y]+y}]"
-        pdf.stroke_line [pdf.bounds.left+bounds[:x], pdf.bounds.bottom+bounds[:y]+y], [pdf.bounds.left+bounds[:x]+bounds[:width], pdf.bounds.bottom+bounds[:y]+y]
+#        pdf.stroke_line [pdf.bounds.left+bounds[:x], pdf.bounds.bottom+bounds[:y]+y], [pdf.bounds.left+bounds[:x]+bounds[:width], pdf.bounds.bottom+bounds[:y]+y]
 
         pdf.line_width = save_line_width
       end
