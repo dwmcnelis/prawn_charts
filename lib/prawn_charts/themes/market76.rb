@@ -7,7 +7,7 @@ module PrawnCharts
     # Market76 theme
     class Market76 < Theme
       def initialize
-        palette = {black: "000000", slate_blue40: "011e29", slate_blue20: "15323d", slate_blue: "294651", blue20: "3d5a65", blue40: "516e79", blue60: "65828d", blue80: "7996a1", blue100: "8daab5", blue140: "b5d2dd", blue160: "c9e6f1", pale_blue: "ccd0d2", paleblue20: "c9e6f1", paleblue30: "eaeef0", paleblue40: "f4f8fa", white: "ffffff"}
+        palette = {black: '000000', slate_blue40: '011e29', slate_blue20: '15323d', slate_blue: '294651', blue20: '3d5a65', blue40: '516e79', blue60: '65828d', blue80: '7996a1', blue100: '8daab5', blue140: 'b5d2dd', blue160: 'c9e6f1', pale_blue: 'ccd0d2', paleblue20: 'c9e6f1', paleblue30: 'eaeef0', paleblue40: 'f4f8fa', white: 'ffffff'}
         super({
           :background => [palette[:paleblue40], palette[:white]],
           :marker => palette[:slate_blue],

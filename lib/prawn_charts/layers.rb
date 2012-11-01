@@ -1,6 +1,5 @@
 
 require 'prawn_charts/layers/layer'
-require 'prawn_charts/layers/all_smiles'
 require 'prawn_charts/layers/area'
 require 'prawn_charts/layers/average'
 require 'prawn_charts/layers/bar'

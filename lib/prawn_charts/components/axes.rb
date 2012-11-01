@@ -8,18 +8,31 @@ module PrawnCharts
       include PrawnCharts::Helpers::Marker
 
       def draw(pdf, bounds, options={})
-        stroke_width = options[:stroke_width]
-
-        colour = options[:theme].grid || options[:theme].marker
+        pdf.reset_text_marks
+        #pdf.text_mark ":#{id} centroid #{pdf.bounds.left+bounds[:x]+bounds[:width]/2.0,},#{pdf.bounds.bottom+bounds[:y]+bounds[:height]/2.0], :radius => 3}"
+        #pdf.centroid_mark([pdf.bounds.left+bounds[:x]+bounds[:width]/2.0,pdf.bounds.bottom+bounds[:y]+bounds[:height]/2.0],:radius => 3)
+        #pdf.crop_marks([pdf.bounds.left+bounds[:x],pdf.bounds.bottom+bounds[:y]+bounds[:height]],bounds[:width],bounds[:height])
+        save_line_width = pdf.line_width
+        stroke_width = (options[:relative]) ? relative(options[:stroke_width]) : options[:stroke_width]
+        color = theme.grid || theme.marker
         unless options[:show_x] == false
           y = (options[:max_value] * bounds[:height])/(options[:max_value] - options[:min_value])
-          pdf.line(:x1 => 0, :y1 => y, :x2 => bounds[:width], :y2 => y, :style => "stroke: #{colour.to_s}; stroke-width: #{stroke_width};")
+          #pdf.text_mark "y #{y}"
+          pdf.stroke_color = color
+          pdf.line_width = stroke_width
+          #pdf.text_mark "line stroke_line [#{pdf.bounds.left+bounds[:x]}, #{pdf.bounds.bottom+bounds[:y]+y}], [#{pdf.bounds.left+bounds[:x]+bounds[:width]}, #{pdf.bounds.bottom+bounds[:y]+y}]"
+          pdf.stroke_line [pdf.bounds.left+bounds[:x], pdf.bounds.bottom+bounds[:y]+y], [pdf.bounds.left+bounds[:x]+bounds[:width], pdf.bounds.bottom+bounds[:y]+y]
         end
 
         unless options[:show_y] == false
           x = -0.5
-          pdf.line(:x1 => x, :y1 => 0, :x2 => x, :y2 => bounds[:height], :style => "stroke: #{colour.to_s}; stroke-width: #{stroke_width};")
+          #pdf.text_mark "x #{x}"
+          pdf.stroke_color = color
+          pdf.line_width = stroke_width
+          #pdf.text_mark "line stroke_line [#{pdf.bounds.left+bounds[:x]+x}, #{pdf.bounds.bottom+bounds[:y]}], [#{pdf.bounds.left+bounds[:x]+x}, #{pdf.bounds.bottom+bounds[:y]+bounds[:height]}]"
+          pdf.stroke_line [pdf.bounds.left+bounds[:x]+x, pdf.bounds.bottom+bounds[:y]], [pdf.bounds.left+bounds[:x]+x, pdf.bounds.bottom+bounds[:y]+bounds[:height]]
         end
+        pdf.line_width = save_line_width
       end
     end # Axes
 

@@ -8,9 +8,11 @@ module PrawnCharts
       TITLE_FONT_SIZE = 80
 
       def draw(pdf, bounds, options={})
-        pdf.centroid_mark([pdf.bounds.left+bounds[:x],pdf.bounds.bottom+bounds[:y]],:radius => 3)
+        pdf.reset_text_marks
+        #pdf.text_mark ":#{id} centroid #{pdf.bounds.left+bounds[:x]+bounds[:width]/2.0,},#{pdf.bounds.bottom+bounds[:y]+bounds[:height]/2.0], :radius => 3}"
+        pdf.centroid_mark([pdf.bounds.left+bounds[:x]+bounds[:width]/2.0,pdf.bounds.bottom+bounds[:y]+bounds[:height]/2.0],:radius => 3)
         pdf.crop_marks([pdf.bounds.left+bounds[:x],pdf.bounds.bottom+bounds[:y]+bounds[:height]],bounds[:width],bounds[:height])
-        theme = options[:theme] || PrawnCharts::Themes::Theme.default
+        #pdf.axis_marks
         font_family = theme.font_family || "Helvetica"
         if (theme.title_font_size)
           font_size = relative(theme.title_font_size)

@@ -17,11 +17,16 @@ module PrawnCharts
 
       def draw(pdf, bounds, options={})
           self.components.each do |component|
-            component.render(pdf,
-              bounds_for([bounds[:width], bounds[:height]],
-                component.position,
-                component.size),
-              options)
+            sub_bounds = bounds_for([bounds[:width], bounds[:height]],
+                                    component.position,
+                                    component.size)
+            pdf.bounding_box([bounds[:x]+sub_bounds[:x],bounds[:y]+bounds[:height]-sub_bounds[:y]], :width => sub_bounds[:width], :height => sub_bounds[:height]) do
+              component.render(pdf,
+                bounds_for([bounds[:width], bounds[:height]],
+                  [0.0,0.0],
+                  component.size),
+                options)
+            end
           end
       end
 
