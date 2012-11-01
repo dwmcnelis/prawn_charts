@@ -11,6 +11,7 @@ require 'prawn_charts/layouts/pie'
 require 'prawn_charts/layouts/reversed'
 require 'prawn_charts/layouts/spark_line'
 require 'prawn_charts/layouts/split'
+require 'prawn_charts/layouts/test'
 
 # Layouts piece the entire graph together from a collection
 # of components.  Creating new layouts allows you to create

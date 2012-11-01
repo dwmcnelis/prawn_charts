@@ -6,7 +6,11 @@ module PrawnCharts
 
     class Background < Component
       def draw(pdf, bounds, options={})
-        pdf.axis_marks
+        pdf.reset_text_marks
+        #pdf.text_mark ":#{id} centroid #{pdf.bounds.left+bounds[:x]+bounds[:width]/2.0,},#{pdf.bounds.bottom+bounds[:y]+bounds[:height]/2.0], :radius => 3}"
+        pdf.centroid_mark([pdf.bounds.left+bounds[:x]+bounds[:width]/2.0,pdf.bounds.bottom+bounds[:y]+bounds[:height]/2.0],:radius => 3)
+        pdf.crop_marks([pdf.bounds.left+bounds[:x],pdf.bounds.bottom+bounds[:y]+bounds[:height]],bounds[:width],bounds[:height])
+        #pdf.axis_marks
         start_color = theme.background[0] || 'ffffff'
         stop_color = theme.background[1] || 'ffffff'
         width = bounds[:width] || 540
