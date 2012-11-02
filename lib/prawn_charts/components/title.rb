@@ -5,7 +5,7 @@ module PrawnCharts
   module Components
 
     class Title < Component
-      TITLE_FONT_SIZE = 80
+      DEFAULT_TITLE_FONT_SIZE = 80
 
       def draw(pdf, bounds, options={})
         pdf.reset_text_marks
@@ -14,11 +14,7 @@ module PrawnCharts
         pdf.crop_marks([pdf.bounds.left+bounds[:x],pdf.bounds.bottom+bounds[:y]+bounds[:height]],bounds[:width],bounds[:height])
         #pdf.axis_marks
         font_family = theme.font_family || "Helvetica"
-        if (theme.title_font_size)
-          font_size = relative(theme.title_font_size)
-        else
-          font_size = relative(TITLE_FONT_SIZE)
-        end
+        font_size = theme.title_font_size ? relative(theme.title_font_size) : relative(DEFAULT_TITLE_FONT_SIZE)
         text_color =  theme.title || '000000'
         #pdf.text_mark("title #{options[:title]}, x #{bounds[:x]}, y #{bounds[:y]}, w #{ bounds[:width]}, font_family #{font_family}, font_size #{font_size}, text_color #{text_color}")
         if options[:title]

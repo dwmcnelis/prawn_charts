@@ -9,10 +9,10 @@ module PrawnCharts
         super do |components|
           self.components << PrawnCharts::Components::Title.new(:title, :position => [5, 93], :size => [90, 7])
           components << PrawnCharts::Components::Viewport.new(:view, :position => [5, 10], :size => [90, 80]) do |graph|
-            #graph << PrawnCharts::Components::ValueMarkers.new(:values, :position => [0, 2], :size => [8, 89])
+            graph << PrawnCharts::Components::ValueMarkers.new(:values, :position => [5, 5], :size => [10, 90])
             graph << PrawnCharts::Components::Grid.new(:grid, :position => [5, 5], :size => [90, 90], :stroke_width => 1)
-            #graph << PrawnCharts::Components::VerticalGrid.new(:vertical_grid, :position => [10, 0], :size => [90, 89], :stroke_width => 1)
-            #graph << PrawnCharts::Components::DataMarkers.new(:labels, :position => [10, 92], :size => [90, 8])
+            graph << PrawnCharts::Components::VerticalGrid.new(:vgrid, :position => [5, 5], :size => [90, 90], :stroke_width => 1, :key_markers => 20)
+            graph << PrawnCharts::Components::DataMarkers.new(:labels, :position => [10, 92], :size => [90, 8])
             graph << PrawnCharts::Components::Graphs.new(:graphs, :position => [5, 5], :size => [90, 90])
           end
           components << PrawnCharts::Components::Legend.new(:legend, :position => [5, 5], :size => [90, 5])

@@ -15,22 +15,22 @@ module PrawnCharts
           valh = max_value + min_value * -1 #value_height
           maxh = max_value * height / valh #positive area height
           minh = min_value * height / valh #negative area height
-                                                         #puts "height = #{height} and max_value = #{max_value} and min_value = #{min_value} and y = #{y} and point = #{points[idx]}"
+          #puts "height = #{height} and max_value = #{max_value} and min_value = #{min_value} and y = #{y} and point = #{points[idx]}"
 
-                                                         #if points[idx] > 0
-                                                         #  bar_height = points[idx]*maxh/max_value
-                                                         #else
-                                                         #  bar_height = points[idx]*minh/min_value
-                                                         #end
+          #if points[idx] > 0
+          #  bar_height = points[idx]*maxh/max_value
+          #else
+          #  bar_height = points[idx]*minh/min_value
+          #end
 
-                                                         #puts " y = #{y} and point = #{points[idx]}"
-                                                         #pdf.g(:transform => "translate(-#{relative(0.5)}, -#{relative(0.5)})") {
-                                                         #  pdf.rect( :x => x, :y => y, :width => @bar_width + relative(1), :height => bar_height + relative(1),
-                                                         #            :style => "fill: black; fill-opacity: 0.15; stroke: none;" )
-                                                         #  pdf.rect( :x => x+relative(0.5), :y => y+relative(2), :width => @bar_width + relative(1), :height => bar_height - relative(0.5),
-                                                         #            :style => "fill: black; fill-opacity: 0.15; stroke: none;" )
-                                                         #
-                                                         #}
+          #puts " y = #{y} and point = #{points[idx]}"
+          #pdf.g(:transform => "translate(-#{relative(0.5)}, -#{relative(0.5)})") {
+          #  pdf.rect( :x => x, :y => y, :width => @bar_width + relative(1), :height => bar_height + relative(1),
+          #            :style => "fill: black; fill-opacity: 0.15; stroke: none;" )
+          #  pdf.rect( :x => x+relative(0.5), :y => y+relative(2), :width => @bar_width + relative(1), :height => bar_height - relative(0.5),
+          #            :style => "fill: black; fill-opacity: 0.15; stroke: none;" )
+          #
+          #}
 
           pdf.line(:x1=>x+@bar_width/2,:x2=>x+@bar_width/2,:y1=>y[0],:y2=>y[4], :style => "stroke:#{(outline.to_s || options[:theme].marker || 'white').to_s}; stroke-width:1")
           pdf.line(:x1=>x+@bar_width/4,:x2=>x+@bar_width/4*3,:y1=>y[0],:y2=>y[0], :style => "stroke:#{(outline.to_s || options[:theme].marker || 'white').to_s}; stroke-width:1")

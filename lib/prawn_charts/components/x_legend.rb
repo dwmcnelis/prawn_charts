@@ -17,17 +17,6 @@ module PrawnCharts
             pdf.text_box options[:x_legend], :at => [bounds[:width]/2.0,bounds[:height]], :width =>  bounds[:width], :align => :center, :color => text_color, :size => font_size
           end
         end
-        #if options[:title]
-        #  pdf.text(options[:x_legend],
-        #           :class => 'title',
-        #  :x => (bounds[:width] / 2),
-        #  :y => bounds[:height],
-        #      'font-size' => options[:theme].legend_font_size || relative(100),
-        #      'font-family' => options[:theme].font_family,
-        #  :fill => options[:theme].marker,
-        #  :stroke => 'none', 'stroke-width' => '0',
-        #      'text-anchor' => (@options[:text_anchor] || 'middle'))
-        #end
       end
     end #XLegend
 

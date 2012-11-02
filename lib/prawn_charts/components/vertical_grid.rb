@@ -10,26 +10,51 @@ module PrawnCharts
       attr_accessor :markers
 
       def draw(pdf, bounds, options={})
-        colour = options[:theme].grid || options[:theme].marker
+        pdf.reset_text_marks
+        #pdf.text_mark ":#{id} centroid #{pdf.bounds.left+bounds[:x]+bounds[:width]/2.0,},#{pdf.bounds.bottom+bounds[:y]+bounds[:height]/2.0], :radius => 3}"
+        pdf.centroid_mark([pdf.bounds.left+bounds[:x]+bounds[:width]/2.0,pdf.bounds.bottom+bounds[:y]+bounds[:height]/2.0],:radius => 3)
+        pdf.crop_marks([pdf.bounds.left+bounds[:x],pdf.bounds.bottom+bounds[:y]+bounds[:height]],bounds[:width],bounds[:height])
+        #pdf.axis_marks
+        save_line_width = pdf.line_width
+        markers = (options[:key_markers] || self.markers) || 5
+        stroke_width = (options[:relative]) ? relative(options[:stroke_width]) : options[:stroke_width]
+        color = theme.grid || theme.marker
 
         if options[:graph].point_markers #get vertical grid lines up with points if there are labels for them
           point_distance = bounds[:width] / (options[:graph].point_markers.size).to_f
           stroke_width = options[:stroke_width]
           (0...options[:graph].point_markers.size).map do |idx|
             x = point_distance * idx  + point_distance/2
-            pdf.line(:x1 => x, :y1 => 0, :x2 => x, :y2 => bounds[:height], :style => "stroke: #{colour.to_s}; stroke-width: #{stroke_width};")
+            #pdf.text_mark "x #{x}"
+            pdf.stroke_color = color
+            pdf.line_width = stroke_width
+            #pdf.text_mark "line stroke_line [#{pdf.bounds.left+bounds[:x]+x}, #{pdf.bounds.bottom+bounds[:y]}], [#{pdf.bounds.left+bounds[:x]+x}, #{pdf.bounds.bottom+bounds[:y]+bounds[:height]}]"
+            pdf.stroke_line [pdf.bounds.left+bounds[:x]+x, pdf.bounds.bottom+bounds[:y]], [pdf.bounds.left+bounds[:x]+x, pdf.bounds.bottom+bounds[:y]+bounds[:height]]
           end
           #add the far right and far left lines
-          pdf.line(:x1 => 0, :y1 => 0, :x2 => 0, :y2 => bounds[:height], :style => "stroke: #{colour.to_s}; stroke-width: #{stroke_width};")
-          pdf.line(:x1 => bounds[:width], :y1 => 0, :x2 => bounds[:width], :y2 => bounds[:height], :style => "stroke: #{colour.to_s}; stroke-width: #{stroke_width};")
+          x = 0
+          #pdf.text_mark "x #{x}"
+          pdf.stroke_color = color
+          pdf.line_width = stroke_width
+          #pdf.text_mark "line stroke_line [#{pdf.bounds.left+bounds[:x]+x}, #{pdf.bounds.bottom+bounds[:y]}], [#{pdf.bounds.left+bounds[:x]+x}, #{pdf.bounds.bottom+bounds[:y]+bounds[:height]}]"
+          pdf.stroke_line [pdf.bounds.left+bounds[:x]+x, pdf.bounds.bottom+bounds[:y]], [pdf.bounds.left+bounds[:x]+x, pdf.bounds.bottom+bounds[:y]+bounds[:height]]
+          x = bounds[:width]
+          #pdf.text_mark "x #{x}"
+          pdf.stroke_color = color
+          pdf.line_width = stroke_width
+          #pdf.text_mark "line stroke_line [#{pdf.bounds.left+bounds[:x]+x}, #{pdf.bounds.bottom+bounds[:y]}], [#{pdf.bounds.left+bounds[:x]+x}, #{pdf.bounds.bottom+bounds[:y]+bounds[:height]}]"
+          pdf.stroke_line [pdf.bounds.left+bounds[:x]+x, pdf.bounds.bottom+bounds[:y]], [pdf.bounds.left+bounds[:x]+x, pdf.bounds.bottom+bounds[:y]+bounds[:height]]
         else
 
-          markers =  (options[:key_markers] || self.markers) || 5 #options[:point_markers].size#
-          stroke_width = options[:stroke_width]
           each_marker(markers, options[:min_key], options[:max_key], bounds[:width], options, :key_formatter) do |label, x|
-            pdf.line(:x1 => x, :y1 => 0, :x2 => x, :y2 => bounds[:height], :style => "stroke: #{colour.to_s}; stroke-width: #{stroke_width};")
+            #pdf.text_mark "x #{x}"
+            pdf.stroke_color = color
+            pdf.line_width = stroke_width
+            #pdf.text_mark "line stroke_line [#{pdf.bounds.left+bounds[:x]+x}, #{pdf.bounds.bottom+bounds[:y]}], [#{pdf.bounds.left+bounds[:x]+x}, #{pdf.bounds.bottom+bounds[:y]+bounds[:height]}]"
+            pdf.stroke_line [pdf.bounds.left+bounds[:x]+x, pdf.bounds.bottom+bounds[:y]], [pdf.bounds.left+bounds[:x]+x, pdf.bounds.bottom+bounds[:y]+bounds[:height]]
           end
 
+          pdf.line_width = save_line_width
         end
       end
     end # Vertical Grid

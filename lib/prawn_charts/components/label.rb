@@ -6,15 +6,21 @@ module PrawnCharts
 
     class Label < Component
       def draw(pdf, bounds, options={})
-        pdf.text(@options[:text],
-          :class => 'text',
-          :x => (bounds[:width] / 2),
-          :y => bounds[:height],
-          'font-size' => relative(100),
-          'font-family' => options[:theme].font_family,
-          :fill => options[:theme].marker,
-          :stroke => 'none', 'stroke-width' => '0',
-          'text-anchor' => (@options[:text_anchor] || 'middle'))
+        pdf.reset_text_marks
+        #pdf.text_mark ":#{id} centroid #{pdf.bounds.left+bounds[:x]+bounds[:width]/2.0,},#{pdf.bounds.bottom+bounds[:y]+bounds[:height]/2.0], :radius => 3}"
+        pdf.centroid_mark([pdf.bounds.left+bounds[:x]+bounds[:width]/2.0,pdf.bounds.bottom+bounds[:y]+bounds[:height]/2.0],:radius => 3)
+        pdf.crop_marks([pdf.bounds.left+bounds[:x],pdf.bounds.bottom+bounds[:y]+bounds[:height]],bounds[:width],bounds[:height])
+        #pdf.axis_marks
+        font_family = theme.font_family || "Helvetica"
+        font_size = relative(100)
+        text_color =  theme.marker || '000000'
+        #pdf.text_mark("title #{options[:title]}, x #{bounds[:x]}, y #{bounds[:y]}, w #{ bounds[:width]}, font_family #{font_family}, font_size #{font_size}, text_color #{text_color}")
+        if options[:title]
+          pdf.font(font_family) do
+            pdf.fill_color text_color
+            pdf.text_box @options[:text], :at => [pdf.bounds.left+bounds[:x]+bounds[:width]/2.0,pdf.bounds.bottom+bounds[:y]+font_size], :width =>  bounds[:width], :align => :center, :color => text_color, :size => font_size
+          end
+        end
       end
     end # Label
 
