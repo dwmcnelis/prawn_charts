@@ -14,6 +14,7 @@ require 'prawn_charts/layers/pie_slice'
 require 'prawn_charts/layers/spark_line_bar'
 require 'prawn_charts/layers/scatter'
 require 'prawn_charts/layers/stacked'
+require 'prawn_charts/layers/vertical_line'
 
 module PrawnCharts
   module Layers
