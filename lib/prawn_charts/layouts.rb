@@ -2,6 +2,7 @@
 require 'prawn_charts/layouts/layout'
 require 'prawn_charts/layouts/axis_legend'
 require 'prawn_charts/layouts/basic'
+require 'prawn_charts/layouts/bar'
 require 'prawn_charts/layouts/cubed'
 require 'prawn_charts/layouts/cubed3d'
 require 'prawn_charts/layouts/default'

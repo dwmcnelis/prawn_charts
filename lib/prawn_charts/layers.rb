@@ -1,10 +1,10 @@
 
 require 'prawn_charts/layers/layer'
-require 'prawn_charts/layers/all_smiles'
 require 'prawn_charts/layers/area'
 require 'prawn_charts/layers/average'
 require 'prawn_charts/layers/bar'
 require 'prawn_charts/layers/box'
+require 'prawn_charts/layers/column'
 require 'prawn_charts/layers/line'
 require 'prawn_charts/layers/multi'
 require 'prawn_charts/layers/multi_area'
