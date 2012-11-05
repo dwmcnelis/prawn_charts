@@ -142,6 +142,9 @@ module PrawnCharts
       @height = (options[:size] ? options[:size][1] : 360)
       pdf.bounding_box([@at[0],@at[1]], :width => @width, :height => @height) do
         pdf.reset_text_marks
+        #pdf.text_mark ":#{id} centroid #{pdf.bounds.left+bounds[:x]+bounds[:width]/2.0,},#{pdf.bounds.bottom+bounds[:y]+bounds[:height]/2.0], :radius => 3}"
+        pdf.centroid_mark([pdf.bounds.left+pdf.bounds.width/2.0,pdf.bounds.bottom+pdf.bounds.height/2.0+pdf.bounds.height],:radius => 3)
+        pdf.crop_marks([pdf.bounds.left,pdf.bounds.bottom+pdf.bounds.height],pdf.bounds.width,pdf.bounds.height)
         if !options[:layout].nil?
           options[:layout].render(pdf,options)
         else

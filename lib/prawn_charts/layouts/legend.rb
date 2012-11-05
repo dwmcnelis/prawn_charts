@@ -22,7 +22,7 @@ module PrawnCharts
         #end
         self.components << PrawnCharts::Components::Legend.new(:legend, :position => [70, 7], :size => [30, 85], :vertical_legend => true)
       end
-    end # Basic
+    end # Legend
 
   end # Layouts
 end # PrawnCharts
