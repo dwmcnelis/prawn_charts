@@ -84,7 +84,7 @@ module PrawnCharts
 
         if percent <= 0.1 # If percentage is really really close to 0% then draw nothing!
 
-        else if percent >= 99.9999 # If percentage is really really close to 100% then draw a circle instead!
+        elsif percent >= 99.9999 # If percentage is really really close to 100% then draw a circle instead!
 
           #if shadow
           #  pdf.circle(:cx => "#{@center_x + shadow_x}", :cy => "#{@center_y + shadow_y}", :r=>"#{radius}",:stroke => "none",
