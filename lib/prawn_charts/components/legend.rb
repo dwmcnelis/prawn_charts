@@ -5,7 +5,7 @@ module PrawnCharts
   module Components
 
     class Legend < Component
-      FONT_SIZE = 80
+      FONT_SIZE = 50 #  TODO: Fix 80
 
       def draw(pdf, bounds, options={})
         pdf.reset_text_marks
@@ -36,6 +36,7 @@ module PrawnCharts
             x = 0
             y = point
             size = @line_height * 0.5
+            y += size
           else
             x = offset + point
             y = 0

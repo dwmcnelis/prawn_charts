@@ -7,7 +7,7 @@ module PrawnCharts
     # Basic Pie Chart Slice..
     class PieSlice < Layer
       MARKER_OFFSET_RATIO = 1.25
-      MARKER_FONT_SIZE = 6
+      MARKER_FONT_SIZE = 3 #  TODO: Fix 6
 
       attr_accessor :diameter
       attr_accessor :percent_used
