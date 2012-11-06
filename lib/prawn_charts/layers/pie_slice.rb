@@ -81,8 +81,10 @@ module PrawnCharts
 
         pdf.centroid_mark(center,:radius => 3)
 
-        # If percentage is really really close to 100% then draw a circle instead!
-        if percent >= 99.9999
+
+        if percent <= 0.1 # If percentage is really really close to 0% then draw nothing!
+
+        elsif percent >= 99.9999 # If percentage is really really close to 100% then draw a circle instead!
 
           #if shadow
           #  pdf.circle(:cx => "#{@center_x + shadow_x}", :cy => "#{@center_y + shadow_y}", :r=>"#{radius}",:stroke => "none",
@@ -95,7 +97,7 @@ module PrawnCharts
           pdf.fill_and_stroke_circle center, radius
           #pdf.circle(:cx => "#{@center_x}", :cy => "#{@center_y}", :r=>"#{radius}",:stroke => stroke, :fill => color.to_s)
 
-        else
+        else # Normal slice
           #if shadow
           #  pdf.path(:d =>  "M#{@center_x + shadow_x},#{@center_y + shadow_y} L#{x_start + shadow_x},#{y_start + shadow_y} A#{radius},#{radius} 0, #{percent >= 50 ? '1' : '0'}, 1, #{x_end + shadow_x} #{y_end + shadow_y} Z",
           #    :fill => shadow_color.to_s, :style => "fill-opacity: #{shadow_opacity.to_s};")

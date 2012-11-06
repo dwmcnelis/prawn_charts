@@ -29,6 +29,8 @@ module PrawnCharts
         active_width, points = layout(legend_info, vertical)
 
         offset = (bounds[:width] - active_width) / 2    # Nudge over a bit for true centering
+        theme.reset_outline
+        outline_color = theme.next_outline
 
         # Render Legend
         points.each_with_index do |point, idx|
@@ -47,6 +49,8 @@ module PrawnCharts
           color = legend_info[idx][:color]
           pdf.fill_color = color
           pdf.fill_rectangle [pdf.bounds.left+bounds[:x]+x,pdf.bounds.bottom+bounds[:y]+y+size], size, size
+          pdf.stroke_color = outline_color
+          pdf.stroke_rectangle [pdf.bounds.left+bounds[:x]+x,pdf.bounds.bottom+bounds[:y]+y+size], size, size
           font_family = theme.font_family || "Helvetica"
           font_size = text_height
           text_color =  theme.marker || 'ffffff'
