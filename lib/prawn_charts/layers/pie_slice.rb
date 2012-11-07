@@ -119,27 +119,29 @@ module PrawnCharts
           #  :stroke => stroke, :fill => color.to_s)
         end
 
-        text_x = @center_x + (Math.cos(mid_angle)*radius*MARKER_OFFSET_RATIO)
-        text_y = @center_y + (Math.sin(mid_angle)*radius*MARKER_OFFSET_RATIO)
+        if percent >= 2.0
+          text_x = @center_x + (Math.cos(mid_angle)*radius*MARKER_OFFSET_RATIO)
+          text_y = @center_y + (Math.sin(mid_angle)*radius*MARKER_OFFSET_RATIO)
 
-        #pdf.text("#{sprintf('%d', percent)}%",
-        #  :x => text_x,
-        #  :y => text_y + relative(MARKER_FONT_SIZE / 2),
-        #  'font-size' => relative(MARKER_FONT_SIZE),
-        #  'font-family' => theme.font_family,
-        #  :fill => (theme.marker || 'black').to_s,
-        #  'text-anchor' => 'middle')
-        font_family = theme.font_family || "Helvetica"
-        font_size = relative(MARKER_FONT_SIZE)
-        width = font_size*4
-        text_color =  theme.marker || '000000'
-        dx = -width/2
-        dy = font_size/2
-        pdf.font(font_family) do
-          pdf.fill_color text_color
-          pdf.text_box "#{sprintf('%d', percent)}%", :at => [text_x+dx,text_y+dy], :width => width, :align => :center, :color => text_color, :size => font_size
+          #pdf.text("#{sprintf('%d', percent)}%",
+          #  :x => text_x,
+          #  :y => text_y + relative(MARKER_FONT_SIZE / 2),
+          #  'font-size' => relative(MARKER_FONT_SIZE),
+          #  'font-family' => theme.font_family,
+          #  :fill => (theme.marker || 'black').to_s,
+          #  'text-anchor' => 'middle')
+          font_family = theme.font_family || "Helvetica"
+          font_size = relative(MARKER_FONT_SIZE)
+          width = font_size*4
+          text_color =  theme.marker || '000000'
+          dx = -width/2
+          dy = font_size/2
+          pdf.font(font_family) do
+            pdf.fill_color text_color
+            pdf.text_box "#{sprintf('%d', percent)}%", :at => [text_x+dx,text_y+dy], :width => width, :align => :center, :color => text_color, :size => font_size
+          end
+          pdf.crop_marks([text_x+dx,text_y+dy],width,font_size)
         end
-        pdf.crop_marks([text_x+dx,text_y+dy],width,font_size)
       end
 
       protected
