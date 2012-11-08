@@ -20,7 +20,7 @@ module PrawnCharts
         #graph << PrawnCharts::Components::Axis.new(:values, :position => [3, 0], :size => [80, 89])
         #graph << PrawnCharts::Components::DataMarkers.new(:labels, :position => [10, 92], :size => [90, 8])
         #end
-        self.components << PrawnCharts::Components::Legend.new(:legend, :position => [65, 0], :size => [35, 93], :vertical_legend => true)
+        self.components << PrawnCharts::Components::Legend.new(:legend, :position => [65, 15], :size => [35, 65], :vertical_legend => true)
       end
     end # Pie
   end # Layouts
