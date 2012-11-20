@@ -83,19 +83,50 @@ module PrawnCharts
         shift_color(color,(shift))
       end
 
+      def gradient(start,stop,steps=10)
+        palette = {}
+        start_r, start_g, start_b = parse_color(start)
+        stop_r, stop_g, stop_b = parse_color(stop)
+        delta_r = (stop_r-start_r)/steps
+        delta_g = (stop_g-start_g)/steps
+        delta_b = (stop_b-start_b)/steps
+
+        palette[:start] = start
+        index = 1
+        until index >= steps  do
+          r = start_r+(index*delta_r)
+          g = start_g+(index*delta_g)
+          b = start_b+(index*delta_b)
+          palette["step#{index}".to_sym] = colors_to_s(r,g,b)
+          index += 1
+        end
+        palette[:stop] = stop
+        palette
+      end
+
       def shift_color(color,shift)
-        r = color[0..1].hex+shift
-        r = 255 if r > 255
-        r = 0 if r < 0
-        g = color[2..3].hex+shift
-        g = 255 if g > 255
-        g = 0 if g < 0
-        b = color[4..5].hex+shift
-        b = 255 if b > 255
-        b = 0 if b < 0
-        (("0"+r.to_s(16))[-2..-1])+(("0"+g.to_s(16))[-2..-1])+(("0"+b.to_s(16))[-2..-1])
+        r, g, b = parse_color(color)
+        r = bounded_color(r+shift)
+        g = bounded_color(g+shift)
+        b = bounded_color(b+shift)
+        colors_to_s(r,g,b)
       end
     end # Theme
 
+    def bounded_color(color)
+      color = 255 if color > 255
+      color = 0 if color < 0
+    end
+
+    def parse_color(color)
+      r = color[0..1].hex
+      g = color[2..3].hex
+      b = color[4..5].hex
+      return r, g, b
+    end
+
+    def colors_to_s(r,g,b)
+      (("0"+r.to_s(16))[-2..-1])+(("0"+g.to_s(16))[-2..-1])+(("0"+b.to_s(16))[-2..-1])
+    end
   end # Themes
 end # PrawnCharts
